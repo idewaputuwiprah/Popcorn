@@ -24,8 +24,8 @@ class TVShowAdapter : RecyclerView.Adapter<TVShowAdapter.TVShowsViewHolder>() {
     class TVShowsViewHolder(private val binding: ItemsTvshowsBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(show: MovieEntity) {
             with(binding) {
-                tvItemTitle.text = StringBuilder("${show.title} (${show.year})")
-                tvItemTags.text = show.tags
+                tvItemTitle.text = show.title
+                tvItemYears.text = show.year
                 tvRating.text = StringBuilder("${show.rating}/10")
 
                 Glide.with(itemView.context)
@@ -35,7 +35,10 @@ class TVShowAdapter : RecyclerView.Adapter<TVShowAdapter.TVShowsViewHolder>() {
 
                 itemView.setOnClickListener {
                     val intent = Intent(it.context, DetailActivity::class.java)
-                    intent.putExtra(DetailActivity.ITEM_ID, show.movieId)
+                    intent.apply {
+                        putExtra(DetailActivity.ITEM_TYPE, "tv_show")
+                        putExtra(DetailActivity.ITEM_ID, show.movieId)
+                    }
                     it.context.startActivity(intent)
                 }
             }

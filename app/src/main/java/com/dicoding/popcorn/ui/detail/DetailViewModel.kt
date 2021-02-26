@@ -1,15 +1,24 @@
 package com.dicoding.popcorn.ui.detail
 
+import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import com.dicoding.popcorn.data.DetailEntity
 import com.dicoding.popcorn.data.MovieEntity
+import com.dicoding.popcorn.data.PopcornRepository
 import com.dicoding.popcorn.utils.DataDummy
 
-class DetailViewModel : ViewModel() {
+class DetailViewModel(private val popcornRepository: PopcornRepository) : ViewModel() {
     private lateinit var itemId: String
 
     fun setItem(itemId: String) {
         this.itemId = itemId
     }
+
+    fun getRemoteMovieDetail(): LiveData<DetailEntity> = popcornRepository.getDetailMovie(itemId.toInt())
+
+    fun getRemoteTVShowDetail(): LiveData<DetailEntity> = popcornRepository.getDetailTVShows(itemId.toInt())
+
+    fun getLoadingStatus(): LiveData<Boolean> = popcornRepository.getLoadingStatus()
 
     fun getMovie() : MovieEntity {
         lateinit var movie: MovieEntity

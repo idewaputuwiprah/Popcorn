@@ -1,92 +1,131 @@
 package com.dicoding.popcorn.ui.detail
 
+import androidx.arch.core.executor.testing.InstantTaskExecutorRule
+import androidx.lifecycle.MutableLiveData
+import androidx.lifecycle.Observer
+import com.dicoding.popcorn.data.DetailEntity
+import com.dicoding.popcorn.data.PopcornRepository
 import com.dicoding.popcorn.utils.DataDummy
+import com.nhaarman.mockitokotlin2.verify
 import org.junit.Test
 
 import org.junit.Assert.*
 import org.junit.Before
 import org.junit.Rule
 import org.junit.rules.ExpectedException
+import org.junit.runner.RunWith
+import org.mockito.Mock
+import org.mockito.Mockito.`when`
+import org.mockito.junit.MockitoJUnitRunner
 import kotlin.jvm.Throws
 
+@RunWith(MockitoJUnitRunner::class)
 class DetailViewModelTest {
     private lateinit var viewModel: DetailViewModel
-    private val dummyMovies = DataDummy.generateDummyMovies()
-    private val dummyTVShows = DataDummy.generateDummyTVShows()
 
     @get:Rule
     var thrown: ExpectedException = ExpectedException.none()
 
+    @get:Rule
+    var instantTaskExecutorRule = InstantTaskExecutorRule()
+
+    @Mock
+    private lateinit var popcornRepository: PopcornRepository
+
+    @Mock
+    private lateinit var observer: Observer<DetailEntity>
+
     @Before
     fun setup() {
-        viewModel = DetailViewModel()
+        viewModel = DetailViewModel(popcornRepository)
     }
 
     @Test
     fun getMovie() {
-        val movieID = DataDummy.generateDummyMovies()[0].movieId
-        viewModel.setItem(movieID)
-        val movieEntity = viewModel.getMovie()
-        assertNotNull(movieEntity)
-        assertEquals(dummyMovies[0].title, movieEntity.title)
-        assertEquals(dummyMovies[0].year, movieEntity.year)
-        assertEquals(dummyMovies[0].tags, movieEntity.tags)
-        assertEquals(dummyMovies[0].rating, movieEntity.rating)
-        assertEquals(dummyMovies[0].duration, movieEntity.duration)
+        val dummyDetail = DataDummy.generateDummyMovieDetail()
+        val detail = MutableLiveData<DetailEntity>()
+        detail.value = dummyDetail
+        viewModel.setItem(dummyDetail.movieId)
 
-        val content = movieEntity.detail
-        val dummyContent = dummyMovies[0].detail
-        assertNotNull(content)
-        assertEquals(dummyContent?.content, content?.content)
-        assertEquals(dummyContent?.director, content?.director)
-        assertEquals(dummyContent?.writers, content?.writers)
-        assertEquals(dummyContent?.stars, content?.stars)
+        `when`(popcornRepository.getDetailMovie(dummyDetail.movieId.toInt())).thenReturn(detail)
+        val movieEntity = viewModel.getRemoteMovieDetail().value
+        assertNotNull(movieEntity)
+        assertEquals(dummyDetail.title, movieEntity?.title)
+        assertEquals(dummyDetail.year, movieEntity?.year)
+        assertEquals(dummyDetail.tags, movieEntity?.tags)
+        assertEquals(dummyDetail.rating, movieEntity?.rating)
+        assertEquals(dummyDetail.duration, movieEntity?.duration)
+        assertEquals(dummyDetail.content, movieEntity?.content)
+        assertEquals(dummyDetail.director, movieEntity?.director)
+        assertEquals(dummyDetail.writers, movieEntity?.writers)
+        assertEquals(dummyDetail.stars, movieEntity?.stars)
+
+        viewModel.getRemoteMovieDetail().observeForever(observer)
+        verify(observer).onChanged(dummyDetail)
     }
 
     @Test
     @Throws(UninitializedPropertyAccessException::class)
     fun emptyIDMovie() {
+        val dummyDetail = DataDummy.generateDummyMovieDetail()
+        val detail = MutableLiveData<DetailEntity>()
+        detail.value = dummyDetail
+
         thrown.expect(UninitializedPropertyAccessException::class.java)
         thrown.expectMessage("lateinit property itemId has not been initialized")
-        val movieEntity = viewModel.getMovie()
-        assertEquals(dummyMovies[0].title, movieEntity.title)
-        assertEquals(dummyMovies[0].year, movieEntity.year)
-        assertEquals(dummyMovies[0].tags, movieEntity.tags)
-        assertEquals(dummyMovies[0].rating, movieEntity.rating)
-        assertEquals(dummyMovies[0].duration, movieEntity.duration)
+
+        val movieEntity = viewModel.getRemoteMovieDetail().value
+        assertEquals(dummyDetail.title, movieEntity?.title)
+        assertEquals(dummyDetail.year, movieEntity?.year)
+        assertEquals(dummyDetail.tags, movieEntity?.tags)
+        assertEquals(dummyDetail.rating, movieEntity?.rating)
+        assertEquals(dummyDetail.duration, movieEntity?.duration)
+        assertEquals(dummyDetail.content, movieEntity?.content)
+        assertEquals(dummyDetail.director, movieEntity?.director)
+        assertEquals(dummyDetail.writers, movieEntity?.writers)
+        assertEquals(dummyDetail.stars, movieEntity?.stars)
     }
 
     @Test
     fun getTVShow() {
-        val showID = DataDummy.generateDummyTVShows()[0].movieId
-        viewModel.setItem(showID)
-        val showEntity = viewModel.getTVShow()
-        assertNotNull(showEntity)
-        assertEquals(dummyTVShows[0].title, showEntity.title)
-        assertEquals(dummyTVShows[0].year, showEntity.year)
-        assertEquals(dummyTVShows[0].tags, showEntity.tags)
-        assertEquals(dummyTVShows[0].rating, showEntity.rating)
-        assertEquals(dummyTVShows[0].duration, showEntity.duration)
+        val dummyDetail = DataDummy.generateDummyTVShowDetail()
+        val detail = MutableLiveData<DetailEntity>()
+        detail.value = dummyDetail
+        viewModel.setItem(dummyDetail.movieId)
 
-        val content = showEntity.detail
-        val dummyContent = dummyTVShows[0].detail
-        assertNotNull(content)
-        assertEquals(dummyContent?.content, content?.content)
-        assertEquals(dummyContent?.director, content?.director)
-        assertEquals(dummyContent?.writers, content?.writers)
-        assertEquals(dummyContent?.stars, content?.stars)
+        `when`(popcornRepository.getDetailTVShows(dummyDetail.movieId.toInt())).thenReturn(detail)
+        val showEntity = viewModel.getRemoteTVShowDetail().value
+
+        assertNotNull(showEntity)
+        assertEquals(dummyDetail.title, showEntity?.title)
+        assertEquals(dummyDetail.year, showEntity?.year)
+        assertEquals(dummyDetail.tags, showEntity?.tags)
+        assertEquals(dummyDetail.rating, showEntity?.rating)
+        assertEquals(dummyDetail.duration, showEntity?.duration)
+        assertEquals(dummyDetail.content, showEntity?.content)
+        assertEquals(dummyDetail.director, showEntity?.director)
+        assertEquals(dummyDetail.writers, showEntity?.writers)
+        assertEquals(dummyDetail.stars, showEntity?.stars)
+
+        viewModel.getRemoteTVShowDetail().observeForever(observer)
+        verify(observer).onChanged(dummyDetail)
     }
 
     @Test
     @Throws(UninitializedPropertyAccessException::class)
     fun emptyIDTVShow() {
+        val dummyDetail = DataDummy.generateDummyTVShowDetail()
+        val detail = MutableLiveData<DetailEntity>()
+        detail.value = dummyDetail
+
         thrown.expect(UninitializedPropertyAccessException::class.java)
         thrown.expectMessage("lateinit property itemId has not been initialized")
-        val showEntity = viewModel.getTVShow()
-        assertEquals(dummyTVShows[0].title, showEntity.title)
-        assertEquals(dummyTVShows[0].year, showEntity.year)
-        assertEquals(dummyTVShows[0].tags, showEntity.tags)
-        assertEquals(dummyTVShows[0].rating, showEntity.rating)
-        assertEquals(dummyTVShows[0].duration, showEntity.duration)
+
+        val showEntity = viewModel.getRemoteTVShowDetail().value
+        assertEquals(dummyDetail.title, showEntity?.title)
+        assertEquals(dummyDetail.year, showEntity?.year)
+        assertEquals(dummyDetail.tags, showEntity?.tags)
+        assertEquals(dummyDetail.rating, showEntity?.rating)
+        assertEquals(dummyDetail.duration, showEntity?.duration)
     }
 }

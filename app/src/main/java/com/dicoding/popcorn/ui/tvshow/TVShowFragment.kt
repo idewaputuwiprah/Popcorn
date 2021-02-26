@@ -8,6 +8,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.popcorn.databinding.FragmentTVShowBinding
+import com.dicoding.popcorn.viewmodels.ViewModelFactory
 
 class TVShowFragment : Fragment() {
     private lateinit var fragmentTVShowBinding: FragmentTVShowBinding
@@ -19,14 +20,22 @@ class TVShowFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val viewModel = ViewModelProvider(this, ViewModelProvider.NewInstanceFactory())[TVShowViewModel::class.java]
+        val factory = ViewModelFactory.getInstance(requireActivity())
+        val viewModel = ViewModelProvider(this, factory)[TVShowViewModel::class.java]
         val adapter = TVShowAdapter()
-        val shows = viewModel.getTVShow()
-        if (shows.isNotEmpty()) {
-            adapter.setShows(shows)
-            fragmentTVShowBinding.rvTvshowsNull.visibility = View.INVISIBLE
-        }
-        else fragmentTVShowBinding.rvTvshowsNull.visibility = View.VISIBLE
+
+        viewModel.getLoadingStatus().observe(requireActivity(), {
+            fragmentTVShowBinding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
+        })
+
+        viewModel.getRemoteTVShows().observe(requireActivity(), { tvShows->
+            if (tvShows.isNotEmpty()) {
+                adapter.setShows(tvShows)
+                adapter.notifyDataSetChanged()
+                fragmentTVShowBinding.tvTvshowsNull.visibility = View.GONE
+            }
+            else fragmentTVShowBinding.tvTvshowsNull.visibility = View.VISIBLE
+        })
 
         with(fragmentTVShowBinding.rvTvshows) {
             layoutManager = LinearLayoutManager(context)

@@ -24,8 +24,8 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     class MovieViewHolder(private val binding: ItemsMovieBinding) : RecyclerView.ViewHolder(binding.root) {
         fun bind(movie: MovieEntity) {
             with(binding) {
-                tvItemTitle.text = StringBuilder("${movie.title} (${movie.year})")
-                tvItemTags.text = movie.tags
+                tvItemTitle.text = movie.title
+                tvItemYears.text = movie.year
                 tvRating.text = StringBuilder("${movie.rating}/10")
 
                 Glide.with(itemView.context)
@@ -35,7 +35,10 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
                 itemView.setOnClickListener {
                     val intent = Intent(it.context, DetailActivity::class.java)
-                    intent.putExtra(DetailActivity.ITEM_ID, movie.movieId)
+                    intent.apply {
+                        putExtra(DetailActivity.ITEM_TYPE, "movie")
+                        putExtra(DetailActivity.ITEM_ID, movie.movieId)
+                    }
                     it.context.startActivity(intent)
                 }
             }

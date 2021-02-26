@@ -11,17 +11,7 @@ import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PopcornRepository(): PopcornDataSource {
-
-    companion object {
-        @Volatile
-        private var instance: PopcornRepository? = null
-
-        fun getInstance(): PopcornRepository =
-            instance ?: synchronized(this) {
-                instance ?: PopcornRepository()
-            }
-    }
+class FakePopcornRepository(): PopcornDataSource {
 
     private val movieList = MutableLiveData<List<MovieEntity>>()
     private val movieDetail = MutableLiveData<DetailEntity>()
