@@ -8,6 +8,4 @@ data class MovieEntity(
     val tags: String = "",
     val path: String = "",
     val duration: String = ""
-) {
-    var detail: ContentEntity? = null
-}
+)

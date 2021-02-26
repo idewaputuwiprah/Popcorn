@@ -27,7 +27,7 @@ class PopcornRepositoryTest {
     private val dummyMovieDetail = DataDummy.generateDummyMovieDetail()
     private val dummyMovieId = dummyMovieDetail.movieId.toInt()
 
-    private val dummyTVShows = DataDummy.generateDummyTVShows()
+    private val dummyTVShows = DataDummy.generateDummyRemoteTVShow()
     private val dummyTVShowDetail = DataDummy.generateDummyTVShowDetail()
     private val dummyTVShowId = dummyTVShowDetail.movieId.toInt()
 

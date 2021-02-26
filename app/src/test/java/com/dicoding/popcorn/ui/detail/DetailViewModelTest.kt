@@ -49,6 +49,7 @@ class DetailViewModelTest {
 
         `when`(popcornRepository.getDetailMovie(dummyDetail.movieId.toInt())).thenReturn(detail)
         val movieEntity = viewModel.getRemoteMovieDetail().value
+        verify(popcornRepository).getDetailMovie(dummyDetail.movieId.toInt())
         assertNotNull(movieEntity)
         assertEquals(dummyDetail.title, movieEntity?.title)
         assertEquals(dummyDetail.year, movieEntity?.year)
@@ -74,7 +75,10 @@ class DetailViewModelTest {
         thrown.expect(UninitializedPropertyAccessException::class.java)
         thrown.expectMessage("lateinit property itemId has not been initialized")
 
+        `when`(popcornRepository.getDetailMovie(dummyDetail.movieId.toInt())).thenReturn(detail)
         val movieEntity = viewModel.getRemoteMovieDetail().value
+        verify(popcornRepository).getDetailMovie(dummyDetail.movieId.toInt())
+
         assertEquals(dummyDetail.title, movieEntity?.title)
         assertEquals(dummyDetail.year, movieEntity?.year)
         assertEquals(dummyDetail.tags, movieEntity?.tags)
@@ -95,6 +99,7 @@ class DetailViewModelTest {
 
         `when`(popcornRepository.getDetailTVShows(dummyDetail.movieId.toInt())).thenReturn(detail)
         val showEntity = viewModel.getRemoteTVShowDetail().value
+        verify(popcornRepository).getDetailTVShows(dummyDetail.movieId.toInt())
 
         assertNotNull(showEntity)
         assertEquals(dummyDetail.title, showEntity?.title)
@@ -121,7 +126,9 @@ class DetailViewModelTest {
         thrown.expect(UninitializedPropertyAccessException::class.java)
         thrown.expectMessage("lateinit property itemId has not been initialized")
 
+        `when`(popcornRepository.getDetailTVShows(dummyDetail.movieId.toInt())).thenReturn(detail)
         val showEntity = viewModel.getRemoteTVShowDetail().value
+        verify(popcornRepository).getDetailTVShows(dummyDetail.movieId.toInt())
         assertEquals(dummyDetail.title, showEntity?.title)
         assertEquals(dummyDetail.year, showEntity?.year)
         assertEquals(dummyDetail.tags, showEntity?.tags)

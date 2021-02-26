@@ -2,25 +2,60 @@ Scenario Unit Testing:
 
 a. MovieViewModelTest
    Memuat Movies
+	- memanipulasi data ketika pemanggilan data movie dari repository
+	- memastikan metode di repository terpanggil
 	- memastikan data movies tidak null
 	- memastikan jumlah data movies sesuai dengan yang diharapkan
+	- memastikan terjadi perubahan di observer LiveData
 
 b. TVShowsViewModelTest
    Memuat TV Shows
+	- memanipulasi data ketika pemanggilan data tv shows dari repository
+	- memastikan metode di repository terpanggil
 	- memastikan data tv shows tidak null
 	- memastikan jumlah data tv shows sesuai dengan yang diharapkan
+	- memastikan terjadi perubahan di observer LiveData
 
 c. DetailViewModelTest
    Memuat Movie
-	- memastikan data movie tidak null
-	- memastikan data movie sesuai dengan yang diharapkan
+	- memanipulasi data ketika pemanggilan data detail movie dari repository
+	- memastikan metode di repository terpanggil
+	- memastikan data detail movie tidak null
+	- memastikan data detail movie sesuai dengan yang diharapkan
 
    Movie ID null
 	- memastikan error yang ditampilkan ketika movie id tidak di inisialisasi adalah "lateinit property itemId has not been initialized"
 
    Memuat TV Show
+	- memanipulasi data ketika pemanggilan data detail tv show dari repository
+	- memastikan metode di repository terpanggil
 	- memastikan data tv show tidak null
 	- memastikan data tv show sesuai dengan yang diharapkan
 
    TV Show ID null
 	- memastikan error yang ditampilkan ketika tv show id tidak di inisialisasi adalah "lateinit property itemId has not been initialized"
+
+d. PopcornRepositoryTest
+   Memuat Movies
+	- memanipulasi data ketika pemanggilan data movie dari repository
+	- memastikan metode di repository terpanggil
+	- memastikan data movies tidak null
+	- memastikan jumlah data movies sesuai dengan yang diharapkan
+
+   Memuat Movie
+	- memanipulasi data ketika pemanggilan data detail movie dari repository
+	- memastikan metode di repository terpanggil
+	- memastikan data detail movie tidak null
+	- memastikan data detail movie sesuai dengan yang diharapkan
+
+   Memuat TV Shows
+	- memanipulasi data ketika pemanggilan data tv shows dari repository
+	- memastikan metode di repository terpanggil
+	- memastikan data tv shows tidak null
+	- memastikan jumlah data tv shows sesuai dengan yang diharapkan
+
+   Memuat TV Show
+	- memanipulasi data ketika pemanggilan data detail tv show dari repository
+	- memastikan metode di repository terpanggil
+	- memastikan data tv show tidak null
+	- memastikan data tv show sesuai dengan yang diharapkan

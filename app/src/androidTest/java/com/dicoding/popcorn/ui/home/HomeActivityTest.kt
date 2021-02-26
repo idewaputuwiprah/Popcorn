@@ -9,7 +9,6 @@ import androidx.test.espresso.assertion.ViewAssertions.matches
 import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.dicoding.popcorn.R
-import com.dicoding.popcorn.data.MovieEntity
 import com.dicoding.popcorn.utils.DataDummy
 import com.dicoding.popcorn.utils.EspressoIdlingResource
 import org.junit.After

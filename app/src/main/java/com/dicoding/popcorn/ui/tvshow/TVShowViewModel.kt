@@ -12,6 +12,4 @@ class TVShowViewModel(private val popcornRepository: PopcornRepository) : ViewMo
 
     fun getLoadingStatus(): LiveData<Boolean> = popcornRepository.getLoadingStatus()
 
-    fun getTVShow() : List<MovieEntity> = DataDummy.generateDummyTVShows()
-
 }

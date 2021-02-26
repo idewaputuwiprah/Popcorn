@@ -1,6 +1,5 @@
 package com.dicoding.popcorn.ui.movie
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
