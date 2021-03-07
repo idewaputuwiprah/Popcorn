@@ -6,6 +6,8 @@ import androidx.lifecycle.ViewModelProvider
 import com.dicoding.popcorn.data.PopcornRepository
 import com.dicoding.popcorn.di.Injection
 import com.dicoding.popcorn.ui.detail.DetailViewModel
+import com.dicoding.popcorn.ui.favorite.movieFav.MovieFavViewModel
+import com.dicoding.popcorn.ui.favorite.tvFav.TVShowFavViewModel
 import com.dicoding.popcorn.ui.movie.MovieViewModel
 import com.dicoding.popcorn.ui.tvshow.TVShowViewModel
 
@@ -32,6 +34,12 @@ class ViewModelFactory private constructor(private val mPopcornRepository: Popco
             }
             modelClass.isAssignableFrom(DetailViewModel::class.java) -> {
                 DetailViewModel(mPopcornRepository) as T
+            }
+            modelClass.isAssignableFrom(MovieFavViewModel::class.java) -> {
+                MovieFavViewModel(mPopcornRepository) as T
+            }
+            modelClass.isAssignableFrom(TVShowFavViewModel::class.java) -> {
+                TVShowFavViewModel(mPopcornRepository) as T
             }
             else -> throw Throwable("Unknown ViewModel class: " + modelClass.name)
         }

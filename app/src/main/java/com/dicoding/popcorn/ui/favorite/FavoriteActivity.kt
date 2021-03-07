@@ -1,13 +1,12 @@
-package com.dicoding.popcorn.ui.home
+package com.dicoding.popcorn.ui.favorite
 
-import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
+import android.view.View
 import com.dicoding.popcorn.databinding.ActivityHomeBinding
-import com.dicoding.popcorn.ui.favorite.FavoriteActivity
 import com.jaeger.library.StatusBarUtil
 
-class HomeActivity : AppCompatActivity() {
+class FavoriteActivity : AppCompatActivity() {
     private lateinit var activityMainBinding: ActivityHomeBinding
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -18,13 +17,10 @@ class HomeActivity : AppCompatActivity() {
 
         StatusBarUtil.setTransparent(this)
 
-        val sectionPagerAdapter = SectionPagerAdapter(this, supportFragmentManager)
-        activityMainBinding.viewPager.adapter = sectionPagerAdapter
+        val sectionPagerFavoriteAdapter = SectionPagerFavoriteAdapter(this, supportFragmentManager)
+        activityMainBinding.viewPager.adapter = sectionPagerFavoriteAdapter
         activityMainBinding.tabs.setupWithViewPager(activityMainBinding.viewPager)
 
-        activityMainBinding.fabFav.setOnClickListener {
-            val intent = Intent(this, FavoriteActivity::class.java)
-            startActivity(intent)
-        }
+        activityMainBinding.fabFav.visibility = View.GONE
     }
 }

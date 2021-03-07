@@ -1,6 +1,5 @@
 package com.dicoding.popcorn.ui.movie
 
-import android.content.Intent
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
@@ -9,11 +8,16 @@ import com.bumptech.glide.request.RequestOptions
 import com.dicoding.popcorn.R
 import com.dicoding.popcorn.data.MovieEntity
 import com.dicoding.popcorn.databinding.ItemsMovieBinding
-import com.dicoding.popcorn.ui.detail.DetailActivity
+import com.dicoding.popcorn.ui.home.ItemCallback
 import java.lang.StringBuilder
 
 class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     private var listMovies = ArrayList<MovieEntity>()
+    private lateinit var onClickListener: ItemCallback
+
+    fun setOnClickListener(onClickListener: ItemCallback) {
+        this.onClickListener = onClickListener
+    }
 
     fun setMovie(movies: List<MovieEntity>) {
         this.listMovies.clear()
@@ -31,15 +35,6 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
                     .load(movie.path)
                     .apply(RequestOptions.placeholderOf(R.drawable.ic_refresh).error(R.drawable.ic_error))
                     .into(imgPoster)
-
-                itemView.setOnClickListener {
-                    val intent = Intent(it.context, DetailActivity::class.java)
-                    intent.apply {
-                        putExtra(DetailActivity.ITEM_TYPE, "movie")
-                        putExtra(DetailActivity.ITEM_ID, movie.movieId)
-                    }
-                    it.context.startActivity(intent)
-                }
             }
         }
     }
@@ -51,6 +46,9 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
 
     override fun onBindViewHolder(holder: MovieViewHolder, position: Int) {
         holder.bind(listMovies[position])
+        holder.itemView.setOnClickListener {
+            onClickListener.onClick(listMovies[position])
+        }
     }
 
     override fun getItemCount(): Int = listMovies.size

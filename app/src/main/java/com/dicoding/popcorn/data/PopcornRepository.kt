@@ -3,23 +3,32 @@ package com.dicoding.popcorn.data
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import com.dicoding.popcorn.BuildConfig
+import com.dicoding.popcorn.data.local.LocalDataSource
+import com.dicoding.popcorn.data.local.MovieFavEntity
+import com.dicoding.popcorn.data.local.TVShowFavEntity
 import com.dicoding.popcorn.data.remote.*
 import com.dicoding.popcorn.data.remote.retrofit.ApiConfig
+import com.dicoding.popcorn.utils.AppExecutors
 import com.dicoding.popcorn.utils.EspressoIdlingResource
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class PopcornRepository(): PopcornDataSource {
+class PopcornRepository(
+    private val localDataSource: LocalDataSource,
+    private val appExecutors: AppExecutors
+): PopcornDataSource {
 
     companion object {
         @Volatile
         private var instance: PopcornRepository? = null
 
-        fun getInstance(): PopcornRepository =
+        fun getInstance(localData: LocalDataSource, appExecutors: AppExecutors): PopcornRepository =
             instance ?: synchronized(this) {
-                instance ?: PopcornRepository()
+                instance ?: PopcornRepository(localData, appExecutors)
             }
     }
 
@@ -108,7 +117,8 @@ class PopcornRepository(): PopcornDataSource {
                                 content = detailResponse.overview,
                                 director = "-",
                                 writers = "-",
-                                stars = "-"
+                                stars = "-",
+                                backdrop = "https://image.tmdb.org/t/p/w500${detailResponse.backdropPath}"
                         )
                         movieDetail.value = detailEntity
                     }
@@ -195,7 +205,8 @@ class PopcornRepository(): PopcornDataSource {
                                 content = detailResponse.overview,
                                 director = "-",
                                 writers = "-",
-                                stars = "-"
+                                stars = "-",
+                                backdrop = "https://image.tmdb.org/t/p/w500${detailResponse.backdropPath}"
                         )
                         tvShowDetail.value = detailEntity
                     }
@@ -210,6 +221,44 @@ class PopcornRepository(): PopcornDataSource {
             }
         })
         return tvShowDetail
+    }
+
+    override fun getMovieFav(): LiveData<PagedList<MovieFavEntity>> {
+        val config = PagedList.Config.Builder()
+            .setEnablePlaceholders(false)
+            .setInitialLoadSizeHint(4)
+            .setPageSize(4)
+            .build()
+        return LivePagedListBuilder(localDataSource.getMovieFav(), config).build()
+    }
+
+    override fun getMovieFavById(movieId: String): LiveData<MovieFavEntity> = localDataSource.getMovieFavById(movieId)
+
+    override fun getTVShowFav(): LiveData<PagedList<TVShowFavEntity>> {
+        val config = PagedList.Config.Builder()
+                .setEnablePlaceholders(false)
+                .setInitialLoadSizeHint(4)
+                .setPageSize(4)
+                .build()
+        return LivePagedListBuilder(localDataSource.getTVShowFav(), config).build()
+    }
+
+    override fun getTVShowFavById(tvId: String): LiveData<TVShowFavEntity> = localDataSource.getTVShowFavById(tvId)
+
+    override fun insertMovieFav(movieFav: List<MovieFavEntity>) {
+        appExecutors.diskIO().execute { localDataSource.insertMovieFav(movieFav) }
+    }
+
+    override fun insertTVShowFav(tvShowFav: List<TVShowFavEntity>) {
+        appExecutors.diskIO().execute { localDataSource.insertTVShowFav(tvShowFav) }
+    }
+
+    override fun deleteMovieFav(movieFavEntity: MovieFavEntity) {
+        appExecutors.diskIO().execute { localDataSource.deleteMovie(movieFavEntity) }
+    }
+
+    override fun deleteTVShowFav(tvShowFavEntity: TVShowFavEntity) {
+        appExecutors.diskIO().execute { localDataSource.deleteTVShow(tvShowFavEntity) }
     }
 
     private fun getDuration(duration: Int): String {

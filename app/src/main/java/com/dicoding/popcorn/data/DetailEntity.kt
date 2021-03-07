@@ -11,5 +11,6 @@ data class DetailEntity(
         val content: String = "",
         val director: String = "",
         val writers: String = "",
-        val stars: String = ""
+        val stars: String = "",
+        val backdrop: String = ""
 )

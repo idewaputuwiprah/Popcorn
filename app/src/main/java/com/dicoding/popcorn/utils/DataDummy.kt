@@ -138,8 +138,8 @@ object DataDummy {
     }
 
     fun generateDummyMovieDetail(): DetailEntity {
-        return DetailEntity("458576", "Monster Hunter", "7.2", "2020", arrayListOf("Fantasy", "Action", "Adventure"), "https://image.tmdb.org/t/p/w500/uwjaCH7PiWrkz7oWJ4fcL3xGrb0.jpg", "1h 44min", "A portal transports Cpt. Artemis and an elite unit of soldiers to a strange world where powerful monsters rule with deadly ferocity. Faced with relentless danger, the team encounters a mysterious hunter who may be their only hope to find a way home.",
-        "-", "-", "-")
+        return DetailEntity("587807", "Tom & Jerry", "7.8", "2021", arrayListOf("Action", "Comedy", "Family", "Animation", "Adventure"), "https://image.tmdb.org/t/p/w500/6KErczPBROQty7QoIsaa6wJYXZi.jpg", "1h 41min", "Tom the cat and Jerry the mouse get kicked out of their home and relocate to a fancy New York hotel, where a scrappy employee named Kayla will lose her job if she can’t evict Jerry before a high-class wedding at the hotel. Her solution? Hiring Tom to get rid of the pesky mouse.",
+        "-", "-", "-", "https://image.tmdb.org/t/p/w500/fev8UFNFFYsD5q7AcYS8LyTzqwl.jpg")
     }
 
     fun generateDummyTVShowDetail(): DetailEntity {

@@ -3,15 +3,24 @@ package com.dicoding.popcorn.data
 import android.util.Log
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MutableLiveData
+import androidx.paging.LivePagedListBuilder
+import androidx.paging.PagedList
 import com.dicoding.popcorn.BuildConfig
+import com.dicoding.popcorn.data.local.LocalDataSource
+import com.dicoding.popcorn.data.local.MovieFavEntity
+import com.dicoding.popcorn.data.local.TVShowFavEntity
 import com.dicoding.popcorn.data.remote.*
 import com.dicoding.popcorn.data.remote.retrofit.ApiConfig
+import com.dicoding.popcorn.utils.AppExecutors
 import com.dicoding.popcorn.utils.EspressoIdlingResource
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
 
-class FakePopcornRepository(): PopcornDataSource {
+class FakePopcornRepository(
+    private val localDataSource: LocalDataSource,
+    private val appExecutors: AppExecutors
+): PopcornDataSource {
 
     private val movieList = MutableLiveData<List<MovieEntity>>()
     private val movieDetail = MutableLiveData<DetailEntity>()
@@ -27,12 +36,12 @@ class FakePopcornRepository(): PopcornDataSource {
         _isLoading.value = true
         EspressoIdlingResource.increment()
         val client = ApiConfig.getApiService().getMovieList(
-            apiKey = BuildConfig.API_KEY,
-            language = "en-US",
-            sortBy = "popularity.desc",
-            includeAdult = false,
-            includeVideo = false,
-            page = 1
+                apiKey = BuildConfig.API_KEY,
+                language = "en-US",
+                sortBy = "popularity.desc",
+                includeAdult = false,
+                includeVideo = false,
+                page = 1
         )
         client.enqueue(object : Callback<MoviesResponse>{
             override fun onResponse(call: Call<MoviesResponse>, response: Response<MoviesResponse>) {
@@ -46,13 +55,13 @@ class FakePopcornRepository(): PopcornDataSource {
                             lateinit var movieEntity : MovieEntity
                             for (movie in movieResponse) {
                                 movieEntity = MovieEntity(
-                                    movieId = movie.id.toString(),
-                                    title = movie.title,
-                                    rating = movie.voteAverage.toString(),
-                                    year = movie.releaseDate.take(4),
-                                    tags = movie.genreIds.joinToString(),
-                                    path = "https://image.tmdb.org/t/p/w500${movie.posterPath}",
-                                    duration = "-"
+                                        movieId = movie.id.toString(),
+                                        title = movie.title,
+                                        rating = movie.voteAverage.toString(),
+                                        year = movie.releaseDate.take(4),
+                                        tags = movie.genreIds.joinToString(),
+                                        path = "https://image.tmdb.org/t/p/w500${movie.posterPath}",
+                                        duration = "-"
                                 )
                                 movies.add(movieEntity)
                             }
@@ -200,6 +209,44 @@ class FakePopcornRepository(): PopcornDataSource {
             }
         })
         return tvShowDetail
+    }
+
+    override fun getMovieFav(): LiveData<PagedList<MovieFavEntity>> {
+        val config = PagedList.Config.Builder()
+                .setEnablePlaceholders(false)
+                .setInitialLoadSizeHint(4)
+                .setPageSize(4)
+                .build()
+        return LivePagedListBuilder(localDataSource.getMovieFav(), config).build()
+    }
+
+    override fun getMovieFavById(movieId: String): LiveData<MovieFavEntity> = localDataSource.getMovieFavById(movieId)
+
+    override fun getTVShowFav(): LiveData<PagedList<TVShowFavEntity>> {
+        val config = PagedList.Config.Builder()
+                .setEnablePlaceholders(false)
+                .setInitialLoadSizeHint(4)
+                .setPageSize(4)
+                .build()
+        return LivePagedListBuilder(localDataSource.getTVShowFav(), config).build()
+    }
+
+    override fun getTVShowFavById(tvId: String): LiveData<TVShowFavEntity> = localDataSource.getTVShowFavById(tvId)
+
+    override fun insertMovieFav(movieFav: List<MovieFavEntity>) {
+        appExecutors.diskIO().execute { localDataSource.insertMovieFav(movieFav) }
+    }
+
+    override fun insertTVShowFav(tvShowFav: List<TVShowFavEntity>) {
+        appExecutors.diskIO().execute { localDataSource.insertTVShowFav(tvShowFav) }
+    }
+
+    override fun deleteMovieFav(movieFavEntity: MovieFavEntity) {
+        appExecutors.diskIO().execute { localDataSource.deleteMovie(movieFavEntity) }
+    }
+
+    override fun deleteTVShowFav(tvShowFavEntity: TVShowFavEntity) {
+        appExecutors.diskIO().execute { localDataSource.deleteTVShow(tvShowFavEntity) }
     }
 
     private fun getDuration(duration: Int): String {

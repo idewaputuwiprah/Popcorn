@@ -2,8 +2,14 @@ package com.dicoding.popcorn.data
 
 import androidx.arch.core.executor.testing.InstantTaskExecutorRule
 import androidx.lifecycle.MutableLiveData
+import androidx.paging.DataSource
+import com.dicoding.popcorn.data.local.LocalDataSource
+import com.dicoding.popcorn.data.local.MovieFavEntity
+import com.dicoding.popcorn.data.local.TVShowFavEntity
+import com.dicoding.popcorn.utils.AppExecutors
 import com.dicoding.popcorn.utils.DataDummy
 import com.dicoding.popcorn.utils.LiveDataTextUtil
+import com.dicoding.popcorn.utils.PageListUtils
 import com.nhaarman.mockitokotlin2.verify
 import org.junit.Test
 
@@ -12,6 +18,7 @@ import org.junit.Rule
 import org.junit.runner.RunWith
 import org.mockito.Mock
 import org.mockito.Mockito.`when`
+import org.mockito.Mockito.mock
 import org.mockito.junit.MockitoJUnitRunner
 
 @RunWith(MockitoJUnitRunner::class)
@@ -20,8 +27,13 @@ class PopcornRepositoryTest {
     @get:Rule
     var instantTaskExecutorRule = InstantTaskExecutorRule()
 
+    private val local = mock(LocalDataSource::class.java)
+    private val appExecutor = mock(AppExecutors::class.java)
+
     @Mock
-    private val popcornRepository = FakePopcornRepository()
+    private val popcornRepository = FakePopcornRepository(local, appExecutor)
+
+    private val roomRepository = FakePopcornRepository(local, appExecutor)
 
     private val dummyMovies = DataDummy.generateDummyRemoteMovie()
     private val dummyMovieDetail = DataDummy.generateDummyMovieDetail()
@@ -91,5 +103,29 @@ class PopcornRepositoryTest {
         assertEquals(dummyTVShowDetail.director, detailEntity.director)
         assertEquals(dummyTVShowDetail.writers, detailEntity.writers)
         assertEquals(dummyTVShowDetail.stars, detailEntity.stars)
+    }
+
+    @Test
+    fun getFavoriteMovie() {
+        val dataSourceFactory = mock(DataSource.Factory::class.java) as DataSource.Factory<Int, MovieFavEntity>
+        `when`(local.getMovieFav()).thenReturn(dataSourceFactory)
+        roomRepository.getMovieFav()
+
+        val movieEntities = PageListUtils.mockPagedList(DataDummy.generateDummyRemoteMovie())
+        verify(local).getMovieFav()
+        assertNotNull(movieEntities)
+        assertEquals(dummyMovies.size, movieEntities.size)
+    }
+
+    @Test
+    fun getFavoriteTVShow() {
+        val dataSourceFactory = mock(DataSource.Factory::class.java) as DataSource.Factory<Int, TVShowFavEntity>
+        `when`(local.getTVShowFav()).thenReturn(dataSourceFactory)
+        roomRepository.getTVShowFav()
+
+        val tvShowEntities = PageListUtils.mockPagedList(DataDummy.generateDummyRemoteTVShow())
+        verify(local).getTVShowFav()
+        assertNotNull(tvShowEntities)
+        assertEquals(dummyTVShows.size, tvShowEntities.size)
     }
 }

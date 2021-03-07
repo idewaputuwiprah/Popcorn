@@ -3,20 +3,18 @@
     <string name="movies">Movies</string>
     <string name="tv_shows">TV Shows</string>
 
+    <string name="movies_fav">Movies Fav</string>
+    <string name="tv_shows_fav">TV Shows Fav</string>
+
     <string name="fragment_movie">Fragment Movie</string>
     <string name="fragment_tvshow">Fragment TV Show</string>
     <string name="title">Title</string>
     <string name="tags">tags</string>
     <string name="rating">Rating</string>
     <string name="title_activity_detail">DetailActivity</string>
-    <!-- Strings used for fragments for navigation -->
-    <string name="first_fragment_label">First Fragment</string>
-    <string name="second_fragment_label">Second Fragment</string>
     <string name="next">Next</string>
     <string name="previous">Previous</string>
 
-    <string name="hello_first_fragment">Hello first fragment</string>
-    <string name="hello_second_fragment">Hello second fragment. Arg: %1$s</string>
     <string name="year">year</string>
     <string name="duration">duration</string>
     <string name="description">"Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nunc tellus est, ultricies a efficitur et, faucibus sodales libero. Vestibulum volutpat sapien arcu, sed hendrerit libero dictum nec. Maecenas lacinia ipsum non sagittis dignissim. Aenean in lobortis nulla. Mauris sit amet risus a tortor elementum commodo porttitor a orci. Nullam turpis nibh, sagittis quis varius ac, ullamcorper ac velit. Nam id cursus libero. Quisque condimentum porta fringilla. Nulla in dignissim mauris, ut aliquam turpis. Ut vestibulum nulla sed purus mattis facilisis eleifend ut lacus. Mauris sagittis ante eu ipsum porttitor volutpat. Sed euismod efficitur libero a elementum. Proin lobortis neque eget erat scelerisque maximus."</string>
@@ -24,4 +22,8 @@
     <string name="writer">Writers:</string>
     <string name="stars">Stars:</string>
     <string name="items_null">Data Tidak Ditemukan</string>
+    <string name="favorite">Favorite</string>
+
+    <string name="movie_detail">Movie Detail</string>
+    <string name="tv_show_detail">TV Show Detail</string>
 </resources>

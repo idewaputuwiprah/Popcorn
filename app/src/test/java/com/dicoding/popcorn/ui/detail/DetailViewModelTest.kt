@@ -75,7 +75,6 @@ class DetailViewModelTest {
         thrown.expect(UninitializedPropertyAccessException::class.java)
         thrown.expectMessage("lateinit property itemId has not been initialized")
 
-        `when`(popcornRepository.getDetailMovie(dummyDetail.movieId.toInt())).thenReturn(detail)
         val movieEntity = viewModel.getRemoteMovieDetail().value
         verify(popcornRepository).getDetailMovie(dummyDetail.movieId.toInt())
 
@@ -126,7 +125,6 @@ class DetailViewModelTest {
         thrown.expect(UninitializedPropertyAccessException::class.java)
         thrown.expectMessage("lateinit property itemId has not been initialized")
 
-        `when`(popcornRepository.getDetailTVShows(dummyDetail.movieId.toInt())).thenReturn(detail)
         val showEntity = viewModel.getRemoteTVShowDetail().value
         verify(popcornRepository).getDetailTVShows(dummyDetail.movieId.toInt())
         assertEquals(dummyDetail.title, showEntity?.title)

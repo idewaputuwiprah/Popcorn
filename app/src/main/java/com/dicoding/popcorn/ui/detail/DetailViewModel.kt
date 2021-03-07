@@ -4,9 +4,12 @@ import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import com.dicoding.popcorn.data.DetailEntity
 import com.dicoding.popcorn.data.PopcornRepository
+import com.dicoding.popcorn.data.local.MovieFavEntity
+import com.dicoding.popcorn.data.local.TVShowFavEntity
 
 class DetailViewModel(private val popcornRepository: PopcornRepository) : ViewModel() {
     private lateinit var itemId: String
+    var item: DetailEntity? = null
 
     fun setItem(itemId: String) {
         this.itemId = itemId
@@ -17,4 +20,24 @@ class DetailViewModel(private val popcornRepository: PopcornRepository) : ViewMo
     fun getRemoteTVShowDetail(): LiveData<DetailEntity> = popcornRepository.getDetailTVShows(itemId.toInt())
 
     fun getLoadingStatus(): LiveData<Boolean> = popcornRepository.getLoadingStatus()
+
+    fun insertMovieFavorite(movies: List<MovieFavEntity>) {
+        popcornRepository.insertMovieFav(movies)
+    }
+
+    fun insertTVShowFavorite(tvShows: List<TVShowFavEntity>) {
+        popcornRepository.insertTVShowFav(tvShows)
+    }
+
+    fun getMovieFavorite(): LiveData<MovieFavEntity> = popcornRepository.getMovieFavById(itemId)
+
+    fun getTVShowFavorite(): LiveData<TVShowFavEntity> = popcornRepository.getTVShowFavById(itemId)
+
+    fun deleteMovie(movieFavEntity: MovieFavEntity) {
+        popcornRepository.deleteMovieFav(movieFavEntity)
+    }
+
+    fun deleteTVShow(tvShowFavEntity: TVShowFavEntity) {
+        popcornRepository.deleteTVShowFav(tvShowFavEntity)
+    }
 }
