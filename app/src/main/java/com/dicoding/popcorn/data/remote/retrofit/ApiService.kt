@@ -5,20 +5,21 @@ import com.dicoding.popcorn.data.remote.DetailTVShowsResponse
 import com.dicoding.popcorn.data.remote.MoviesResponse
 import com.dicoding.popcorn.data.remote.TVShowsResponse
 import retrofit2.Call
+import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query
 
 interface ApiService {
     @GET("discover/movie")
-    fun getMovieList(
+    suspend fun getMovieList(
         @Query("api_key") apiKey: String,
         @Query("language") language: String,
         @Query("sort_by") sortBy: String,
         @Query("include_adult") includeAdult: Boolean,
         @Query("include_video") includeVideo: Boolean,
         @Query("page") page: Int
-    ): Call<MoviesResponse>
+    ): Response<MoviesResponse>
 
     @GET("discover/tv")
     fun getTVShowList(
@@ -31,11 +32,11 @@ interface ApiService {
     ): Call<TVShowsResponse>
 
     @GET("movie/{movie_id}")
-    fun getMovieDetail(
+    suspend fun getMovieDetail(
         @Path("movie_id") id: Int,
         @Query("api_key") apiKey: String,
         @Query("language") language: String
-    ): Call<DetailMovieResponse>
+    ): Response<DetailMovieResponse>
 
     @GET("tv/{tv_id}")
     fun getTVShowsDetail(

@@ -6,9 +6,9 @@ import com.dicoding.popcorn.data.local.MovieFavEntity
 import com.dicoding.popcorn.data.local.TVShowFavEntity
 
 interface PopcornDataSource {
-    fun getRemoteMovies(): LiveData<List<MovieEntity>>
+    suspend fun getRemoteMovies(): List<MovieEntity>
 
-    fun getDetailMovie(id: Int): LiveData<DetailEntity>
+    suspend fun getDetailMovie(id: Int): DetailEntity
 
     fun getRemoteTVShows(): LiveData<List<MovieEntity>>
 

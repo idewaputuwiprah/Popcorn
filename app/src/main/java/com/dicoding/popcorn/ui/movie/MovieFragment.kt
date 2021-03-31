@@ -44,7 +44,7 @@ class MovieFragment : Fragment() {
                 fragmentMovieBinding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
             })
 
-            viewModel.getRemoteMovies().observe(requireActivity(), { movies->
+            viewModel.movies.observe(requireActivity(), { movies->
                 if (movies.isNotEmpty()) {
                     adapter.setMovie(movies)
                     adapter.notifyDataSetChanged()
@@ -52,6 +52,8 @@ class MovieFragment : Fragment() {
                 }
                 else fragmentMovieBinding.tvMoviesNull.visibility = View.VISIBLE
             })
+
+            viewModel.getRemoteMovies()
 
             with(fragmentMovieBinding.rvMovies) {
                 layoutManager = LinearLayoutManager(context)

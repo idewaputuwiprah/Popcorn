@@ -13,6 +13,8 @@ import com.dicoding.popcorn.data.remote.*
 import com.dicoding.popcorn.data.remote.retrofit.ApiConfig
 import com.dicoding.popcorn.utils.AppExecutors
 import com.dicoding.popcorn.utils.EspressoIdlingResource
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.withContext
 import retrofit2.Call
 import retrofit2.Callback
 import retrofit2.Response
@@ -32,7 +34,6 @@ class PopcornRepository(
             }
     }
 
-    private val movieList = MutableLiveData<List<MovieEntity>>()
     private val movieDetail = MutableLiveData<DetailEntity>()
 
     private val tvShowList = MutableLiveData<List<MovieEntity>>()
@@ -42,98 +43,76 @@ class PopcornRepository(
 
     fun getLoadingStatus(): LiveData<Boolean> = _isLoading
 
-    override fun getRemoteMovies(): LiveData<List<MovieEntity>> {
-        _isLoading.value = true
+    override suspend fun getRemoteMovies(): List<MovieEntity> {
+        withContext(Dispatchers.Main){ _isLoading.value = true }
+        val movies = ArrayList<MovieEntity>()
         EspressoIdlingResource.increment()
-        val client = ApiConfig.getApiService().getMovieList(
-            apiKey = BuildConfig.API_KEY,
-            language = "en-US",
-            sortBy = "popularity.desc",
-            includeAdult = false,
-            includeVideo = false,
-            page = 1
-        )
-        client.enqueue(object : Callback<MoviesResponse>{
-            override fun onResponse(call: Call<MoviesResponse>, response: Response<MoviesResponse>) {
-                _isLoading.value = false
-                EspressoIdlingResource.decrement()
-                when (response.code()) {
-                    200 -> {
-                        val movieResponse = response.body()?.results
-                        val movies = ArrayList<MovieEntity>()
-                        if (movieResponse != null) {
-                            lateinit var movieEntity : MovieEntity
-                            for (movie in movieResponse) {
-                                movieEntity = MovieEntity(
-                                    movieId = movie.id.toString(),
-                                    title = movie.title,
-                                    rating = movie.voteAverage.toString(),
-                                    year = movie.releaseDate.take(4),
-                                    tags = movie.genreIds.joinToString(),
-                                    path = "https://image.tmdb.org/t/p/w500${movie.posterPath}",
-                                    duration = "-"
-                                )
-                                movies.add(movieEntity)
-                            }
-                            movieList.value = movies
-                        }
-                    }
-                    else -> {
-                        Log.d("Movie API", response.message())
+        withContext(Dispatchers.IO) {
+            val client = ApiConfig.getApiService().getMovieList(
+                apiKey = BuildConfig.API_KEY,
+                language = "en-US",
+                sortBy = "popularity.desc",
+                includeAdult = false,
+                includeVideo = false,
+                page = 1
+            )
+            withContext(Dispatchers.Main) { _isLoading.value = false }
+            EspressoIdlingResource.decrement()
+            when (client.code()) {
+                200 -> {
+                    for (movie in client.body()!!.results) {
+                        val movieEntity = MovieEntity(
+                            movieId = movie.id.toString(),
+                            title = movie.title,
+                            rating = movie.voteAverage.toString(),
+                            year = movie.releaseDate.take(4),
+                            tags = movie.genreIds.joinToString(),
+                            path = "https://image.tmdb.org/t/p/w500${movie.posterPath}",
+                            duration = "-"
+                        )
+                        movies.add(movieEntity)
                     }
                 }
+                else -> Log.d("Movie API", client.message())
             }
-
-            override fun onFailure(call: Call<MoviesResponse>, t: Throwable) {
-                _isLoading.value = false
-                EspressoIdlingResource.decrement()
-                Log.d("Movie API", t.message.toString())
-            }
-        })
-        return movieList
+        }
+        return movies
     }
 
-    override fun getDetailMovie(id: Int): LiveData<DetailEntity> {
-        _isLoading.value = true
-        val client = ApiConfig.getApiService().getMovieDetail(
+    override suspend fun getDetailMovie(id: Int): DetailEntity {
+        withContext(Dispatchers.Main) { _isLoading.value = true }
+        var detailEntity: DetailEntity? = null
+        EspressoIdlingResource.increment()
+        withContext(Dispatchers.IO) {
+            val client = ApiConfig.getApiService().getMovieDetail(
                 id = id,
                 apiKey = BuildConfig.API_KEY,
                 language = "en-US"
-        )
-        client.enqueue(object : Callback<DetailMovieResponse>{
-            override fun onResponse(call: Call<DetailMovieResponse>, response: Response<DetailMovieResponse>) {
-                _isLoading.value = false
-                if (response.code() == 200) {
-                    val detailResponse = response.body()
-                    if (detailResponse != null) {
-                        val detailEntity = DetailEntity(
-                                movieId = detailResponse.id.toString(),
-                                title = detailResponse.title,
-                                rating = detailResponse.voteAverage.toString(),
-                                year = detailResponse.releaseDate.take(4),
-                                tags = getTags(detailResponse.genres),
-                                path = "https://image.tmdb.org/t/p/w500${detailResponse.posterPath}",
-                                duration = getDuration(detailResponse.runtime),
-                                content = detailResponse.overview,
-                                director = "-",
-                                writers = "-",
-                                stars = "-",
-                                backdrop = "https://image.tmdb.org/t/p/w500${detailResponse.backdropPath}"
-                        )
-                        movieDetail.value = detailEntity
-                    }
-                } else {
-                    Log.d("Detail Movie API", response.message())
+            )
+            withContext(Dispatchers.Main) { _isLoading.value = false }
+            EspressoIdlingResource.decrement()
+            when (client.code()) {
+                200 -> {
+                    val detailResponse = client.body()!!
+                    detailEntity = DetailEntity(
+                        movieId = detailResponse.id.toString(),
+                        title = detailResponse.title,
+                        rating = detailResponse.voteAverage.toString(),
+                        year = detailResponse.releaseDate.take(4),
+                        tags = getTags(detailResponse.genres),
+                        path = "https://image.tmdb.org/t/p/w500${detailResponse.posterPath}",
+                        duration = getDuration(detailResponse.runtime),
+                        content = detailResponse.overview,
+                        director = "-",
+                        writers = "-",
+                        stars = "-",
+                        backdrop = "https://image.tmdb.org/t/p/w500${detailResponse.backdropPath}"
+                    )
                 }
+                else -> Log.d("Detail Movie API", client.message())
             }
-
-            override fun onFailure(call: Call<DetailMovieResponse>, t: Throwable) {
-                _isLoading.value = false
-                Log.d("Detail Movie API", t.message.toString())
-            }
-
-        })
-        return movieDetail
+        }
+        return detailEntity as DetailEntity
     }
 
     override fun getRemoteTVShows(): LiveData<List<MovieEntity>> {
