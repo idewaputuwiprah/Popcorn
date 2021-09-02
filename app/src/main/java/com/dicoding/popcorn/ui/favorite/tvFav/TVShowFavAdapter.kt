@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.dicoding.popcorn.R
-import com.dicoding.popcorn.data.local.TVShowFavEntity
+import com.dicoding.popcorn.core.data.local.entity.TVShowFavEntity
 import com.dicoding.popcorn.databinding.ItemsTvshowsBinding
 import java.lang.StringBuilder
 

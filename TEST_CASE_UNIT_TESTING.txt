@@ -59,3 +59,31 @@ d. PopcornRepositoryTest
 	- memastikan metode di repository terpanggil
 	- memastikan data tv show tidak null
 	- memastikan data tv show sesuai dengan yang diharapkan
+
+   Memuat Movies Favorite
+	- memanipulasi data ketika pemanggilan data movie dari repository
+	- memastikan metode di repository terpanggil
+	- memastikan data movies tidak null
+	- memastikan jumlah data movies sesuai dengan yang diharapkan
+
+   Memuat TV Shows Favorite
+	- memanipulasi data ketika pemanggilan data tv shows dari repository
+	- memastikan metode di repository terpanggil
+	- memastikan data tv shows tidak null
+	- memastikan jumlah data tv shows sesuai dengan yang diharapkan
+
+e. MovieFavViewModelTest
+   Memuat Movies Favorite
+	- memanipulasi data ketika pemanggilan data movie dari repository
+	- memastikan metode di repository terpanggil
+	- memastikan data movies tidak null
+	- memastikan jumlah data movies sesuai dengan yang diharapkan
+	- memastikan terjadi perubahan di observer LiveData
+
+f. TVShowsFavViewModelTest
+   Memuat TV Shows Favorite
+	- memanipulasi data ketika pemanggilan data tv shows dari repository
+	- memastikan metode di repository terpanggil
+	- memastikan data tv shows tidak null
+	- memastikan jumlah data tv shows sesuai dengan yang diharapkan
+	- memastikan terjadi perubahan di observer LiveData

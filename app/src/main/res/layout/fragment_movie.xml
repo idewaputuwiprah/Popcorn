@@ -49,5 +49,5 @@
         android:textStyle="bold"
         android:fontFamily="@font/nuggetmed"
         android:textSize="20sp"
-        android:visibility="invisible"/>
+        android:visibility="gone"/>
 </androidx.constraintlayout.widget.ConstraintLayout>

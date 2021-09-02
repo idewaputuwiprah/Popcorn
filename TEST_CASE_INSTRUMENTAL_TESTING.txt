@@ -30,3 +30,33 @@ d. Menampilkan detail TV Show
 	- Memastikan TextView untuk director tampil sesuai dengan yang diharapkan
 	- Memastikan TextView untuk writers tampil sesuai dengan yang diharapkan
 	- Memastikan TextView untuk stars tampil sesuai dengan yang diharapkan
+
+e. Menampilkan favorite movie
+	- Memberikan tindakan klik pada data pertama di rv_movies
+	- Menekan tombol action_favorite
+	- Menekan tombol floating_action favorite
+	- Memberikan tindakan klik pada data pertama di rv_movies di halaman Favorite
+	- Memastikan TextView untuk title tampil sesuai dengan yang diharapkan
+	- Memastikan TextView untuk year tampil sesuai dengan yang diharapkan
+	- Memastikan TextView untuk tags tampil sesuai dengan yang diharapkan	
+	- Memastikan TextView untuk rating tampil sesuai dengan yang diharapkan
+	- Memastikan TextView untuk duration tampil sesuai dengan yang diharapkan
+	- Memastikan TextView untuk detail tampil sesuai dengan yang diharapkan
+	- Memastikan TextView untuk director tampil sesuai dengan yang diharapkan
+	- Memastikan TextView untuk writers tampil sesuai dengan yang diharapkan
+	- Memastikan TextView untuk stars tampil sesuai dengan yang diharapkan
+
+f. Menampilkan favorite TV Show
+	- Memberikan tindakan klik pada data pertama di rv_tvshows
+	- Menekan tombol action_favorite
+	- Menekan tombol floating_action favorite
+	- Memberikan tindakan klik pada data pertama di rv_tvshows di halaman Favorite
+	- Memastikan TextView untuk title tampil sesuai dengan yang diharapkan
+	- Memastikan TextView untuk year tampil sesuai dengan yang diharapkan
+	- Memastikan TextView untuk tags tampil sesuai dengan yang diharapkan	
+	- Memastikan TextView untuk rating tampil sesuai dengan yang diharapkan
+	- Memastikan TextView untuk duration tampil sesuai dengan yang diharapkan
+	- Memastikan TextView untuk detail tampil sesuai dengan yang diharapkan
+	- Memastikan TextView untuk director tampil sesuai dengan yang diharapkan
+	- Memastikan TextView untuk writers tampil sesuai dengan yang diharapkan
+	- Memastikan TextView untuk stars tampil sesuai dengan yang diharapkan

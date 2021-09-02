@@ -6,26 +6,28 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.dicoding.popcorn.R
-import com.dicoding.popcorn.data.MovieEntity
+import com.dicoding.popcorn.core.domain.model.Movie
 import com.dicoding.popcorn.databinding.ItemsMovieBinding
 import com.dicoding.popcorn.ui.home.ItemCallback
 import java.lang.StringBuilder
 
 class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
-    private var listMovies = ArrayList<MovieEntity>()
+    private var listMovies = ArrayList<Movie>()
     private lateinit var onClickListener: ItemCallback
 
     fun setOnClickListener(onClickListener: ItemCallback) {
         this.onClickListener = onClickListener
     }
 
-    fun setMovie(movies: List<MovieEntity>) {
+    fun setMovie(movies: List<Movie>?) {
+        if (movies == null) return
         this.listMovies.clear()
         this.listMovies.addAll(movies)
+        notifyDataSetChanged()
     }
 
     class MovieViewHolder(private val binding: ItemsMovieBinding) : RecyclerView.ViewHolder(binding.root) {
-        fun bind(movie: MovieEntity) {
+        fun bind(movie: Movie) {
             with(binding) {
                 tvItemTitle.text = movie.title
                 tvItemYears.text = movie.year

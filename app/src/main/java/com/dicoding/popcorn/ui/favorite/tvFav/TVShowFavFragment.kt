@@ -8,10 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dicoding.popcorn.data.local.TVShowFavEntity
+import com.dicoding.popcorn.core.data.local.entity.TVShowFavEntity
 import com.dicoding.popcorn.databinding.FragmentTVShowBinding
 import com.dicoding.popcorn.ui.detail.DetailActivity
-import com.dicoding.popcorn.viewmodels.ViewModelFactory
+import com.dicoding.popcorn.core.ui.ViewModelFactory
 
 class TVShowFavFragment : Fragment() {
     private lateinit var fragmentTVShowBinding: FragmentTVShowBinding
@@ -52,18 +52,18 @@ class TVShowFavFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (!viewModel.getLoadingStatus().hasActiveObservers()) {
-            setUpLoadingObserver()
-        }
+//        if (!viewModel.getLoadingStatus().hasActiveObservers()) {
+//            setUpLoadingObserver()
+//        }
         if (!viewModel.getFavTVShows().hasActiveObservers()) {
             setUpTVShowObserver()
         }
     }
 
     private fun setUpLoadingObserver() {
-        viewModel.getLoadingStatus().observe(requireActivity(), {
-            fragmentTVShowBinding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
-        })
+//        viewModel.getLoadingStatus().observe(requireActivity(), {
+//            fragmentTVShowBinding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
+//        })
     }
 
     private fun setUpTVShowObserver() {

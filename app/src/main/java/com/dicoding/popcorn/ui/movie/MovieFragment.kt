@@ -8,11 +8,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dicoding.popcorn.data.MovieEntity
+import com.dicoding.popcorn.core.domain.model.Movie
+import com.dicoding.popcorn.core.data.Resource
 import com.dicoding.popcorn.databinding.FragmentMovieBinding
 import com.dicoding.popcorn.ui.detail.DetailActivity
 import com.dicoding.popcorn.ui.home.ItemCallback
-import com.dicoding.popcorn.viewmodels.ViewModelFactory
+import com.dicoding.popcorn.core.ui.ViewModelFactory
 
 class MovieFragment : Fragment() {
     private lateinit var fragmentMovieBinding: FragmentMovieBinding
@@ -30,7 +31,7 @@ class MovieFragment : Fragment() {
             val adapter = MovieAdapter()
 
             adapter.setOnClickListener(object : ItemCallback{
-                override fun onClick(data: MovieEntity) {
+                override fun onClick(data: Movie) {
                     val intent = Intent(context, DetailActivity::class.java)
                     intent.apply {
                         putExtra(DetailActivity.ITEM_TYPE, DetailActivity.MOVIE_TYPE)
@@ -40,20 +41,27 @@ class MovieFragment : Fragment() {
                 }
             })
 
-            viewModel.getLoadingStatus().observe(requireActivity(), {
-                fragmentMovieBinding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
-            })
+            fragmentMovieBinding.progressBar.visibility = View.VISIBLE
 
             viewModel.movies.observe(requireActivity(), { movies->
-                if (movies.isNotEmpty()) {
-                    adapter.setMovie(movies)
-                    adapter.notifyDataSetChanged()
-                    fragmentMovieBinding.tvMoviesNull.visibility = View.INVISIBLE
+                if (movies != null) {
+                    when (movies) {
+                        is Resource.Success -> {
+                            adapter.setMovie(movies.data)
+                            fragmentMovieBinding.apply {
+                                tvMoviesNull.visibility = View.GONE
+                                progressBar.visibility = View.GONE
+                            }
+                        }
+                        is Resource.Error -> {
+                            fragmentMovieBinding.apply {
+                                tvMoviesNull.visibility = View.VISIBLE
+                                progressBar.visibility = View.GONE
+                            }
+                        }
+                    }
                 }
-                else fragmentMovieBinding.tvMoviesNull.visibility = View.VISIBLE
             })
-
-            viewModel.getRemoteMovies()
 
             with(fragmentMovieBinding.rvMovies) {
                 layoutManager = LinearLayoutManager(context)

@@ -8,10 +8,10 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dicoding.popcorn.data.local.MovieFavEntity
+import com.dicoding.popcorn.core.data.local.entity.MovieFavEntity
 import com.dicoding.popcorn.databinding.FragmentMovieBinding
 import com.dicoding.popcorn.ui.detail.DetailActivity
-import com.dicoding.popcorn.viewmodels.ViewModelFactory
+import com.dicoding.popcorn.core.ui.ViewModelFactory
 
 class MovieFavFragment : Fragment() {
     private lateinit var fragmentMovieBinding: FragmentMovieBinding
@@ -41,7 +41,7 @@ class MovieFavFragment : Fragment() {
                 }
             })
 
-            setUpLoadingObserver()
+//            setUpLoadingObserver()
             setUpMovieObserver()
 
             with(fragmentMovieBinding.rvMovies) {
@@ -54,19 +54,19 @@ class MovieFavFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-        if (!viewModel.getLoadingStatus().hasActiveObservers()) {
-            setUpLoadingObserver()
-        }
+//        if (!viewModel.getLoadingStatus().hasActiveObservers()) {
+//            setUpLoadingObserver()
+//        }
         if (!viewModel.getFavMovies().hasActiveObservers()) {
             setUpMovieObserver()
         }
     }
 
-    private fun setUpLoadingObserver() {
-        viewModel.getLoadingStatus().observe(requireActivity(), {
-            fragmentMovieBinding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
-        })
-    }
+//    private fun setUpLoadingObserver() {
+//        viewModel.getLoadingStatus().observe(requireActivity(), {
+//            fragmentMovieBinding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
+//        })
+//    }
 
     private fun setUpMovieObserver() {
         viewModel.getFavMovies().observe(requireActivity(), { movies->

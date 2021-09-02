@@ -13,11 +13,13 @@ import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.dicoding.popcorn.R
-import com.dicoding.popcorn.data.local.MovieFavEntity
-import com.dicoding.popcorn.data.local.TVShowFavEntity
+import com.dicoding.popcorn.core.domain.model.Detail
+import com.dicoding.popcorn.core.data.Resource
+import com.dicoding.popcorn.core.data.local.entity.MovieFavEntity
+import com.dicoding.popcorn.core.data.local.entity.TVShowFavEntity
 import com.dicoding.popcorn.databinding.ActivityDetailBinding
 import com.dicoding.popcorn.databinding.ContentDetailBinding
-import com.dicoding.popcorn.viewmodels.ViewModelFactory
+import com.dicoding.popcorn.core.ui.ViewModelFactory
 import com.jaeger.library.StatusBarUtil
 
 class DetailActivity : AppCompatActivity() {
@@ -27,6 +29,7 @@ class DetailActivity : AppCompatActivity() {
         const val MOVIE_TYPE = "movie"
         const val TV_SHOW_TYPE = "tv_show"
     }
+    private lateinit var activityDetailBinding: ActivityDetailBinding
     private lateinit var contentDetailBinding: ContentDetailBinding
     private lateinit var viewModel: DetailViewModel
     private var menu: Menu? = null
@@ -35,12 +38,11 @@ class DetailActivity : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        val activityDetailBinding = ActivityDetailBinding.inflate(layoutInflater)
+        activityDetailBinding = ActivityDetailBinding.inflate(layoutInflater)
         setContentView(activityDetailBinding.root)
 
         setSupportActionBar(activityDetailBinding.toolbar)
         supportActionBar?.setDisplayHomeAsUpEnabled(true)
-
 
         contentDetailBinding = activityDetailBinding.detailContent
         StatusBarUtil.setTransparent(this)
@@ -58,67 +60,62 @@ class DetailActivity : AppCompatActivity() {
                 resources.getString(R.string.tv_show_detail)
 
             if (itemType == MOVIE_TYPE) {
-                getMovieDetail(viewModel)
+                getMovieDetail()
             } else getTVShowDetail(viewModel)
-
-            viewModel.getLoadingStatus().observe(this, {
-                with(contentDetailBinding) {
-                    progressBar.visibility = if (it) View.VISIBLE else View.GONE
-                }
-            })
         }
     }
 
     private fun getTVShowDetail(viewModel: DetailViewModel) {
         viewModel.getRemoteTVShowDetail().observeOnce(this, { detail->
-            viewModel.item = detail
-            with(contentDetailBinding) {
-                tvItemTitle.text = detail.title
-                tvItemYear.text = detail.year
-                tvItemTags.text = detail.tags.joinToString()
-                tvRating.text = detail.rating
-                tvDuration.text = detail.duration
-                tvDetail.text = detail.content
-
-                tvDirector.text = detail.director
-                tvWriters.text = detail.writers
-                tvStars.text = detail.stars
-
-                Glide.with(this@DetailActivity)
-                        .load(detail.backdrop)
-                        .apply(
-                                RequestOptions.placeholderOf(R.drawable.ic_refresh)
-                                        .error(R.drawable.ic_error)
-                        )
-                        .into(imgPoster)
-            }
+            getData(detail)
         })
     }
 
-    private fun getMovieDetail(viewModel: DetailViewModel) {
+    private fun getMovieDetail() {
         viewModel.getRemoteMovieDetail().observeOnce(this, { detail->
-            viewModel.item = detail
-            with(contentDetailBinding) {
-                tvItemTitle.text = detail.title
-                tvItemYear.text = detail.year
-                tvItemTags.text = detail.tags.joinToString()
-                tvRating.text = detail.rating
-                tvDuration.text = detail.duration
-                tvDetail.text = detail.content
-
-                tvDirector.text = detail.director
-                tvWriters.text = detail.writers
-                tvStars.text = detail.stars
-
-                Glide.with(this@DetailActivity)
-                        .load(detail.backdrop)
-                        .apply(
-                                RequestOptions.placeholderOf(R.drawable.ic_refresh)
-                                        .error(R.drawable.ic_error)
-                        )
-                        .into(imgPoster)
-            }
+            getData(detail)
         })
+    }
+
+    private fun getData(detail: Resource<Detail>?) {
+        if (detail != null) {
+            when (detail) {
+                is Resource.Success -> {
+                    val data = detail.data
+                    viewModel.item = data
+                    setToView(data!!)
+                }
+                is Resource.Error -> {
+                    activityDetailBinding.apply {
+                        detailItem.visibility = View.GONE
+                        tvDetailNotFound.visibility = View.VISIBLE
+                    }
+                }
+            }
+        }
+    }
+
+    private fun setToView(detail: Detail) {
+        with(contentDetailBinding) {
+            tvItemTitle.text = detail.title
+            tvItemYear.text = detail.year
+            tvItemTags.text = detail.tags.joinToString()
+            tvRating.text = detail.rating
+            tvDuration.text = detail.duration
+            tvDetail.text = detail.content
+
+            tvDirector.text = detail.director
+            tvWriters.text = detail.writers
+            tvStars.text = detail.stars
+
+            Glide.with(this@DetailActivity)
+                .load(detail.backdrop)
+                .apply(
+                    RequestOptions.placeholderOf(R.drawable.ic_refresh)
+                        .error(R.drawable.ic_error)
+                )
+                .into(imgPoster)
+        }
     }
 
     override fun onSupportNavigateUp(): Boolean {
@@ -164,10 +161,8 @@ class DetailActivity : AppCompatActivity() {
             R.id.action_favorite -> {
                 if (type == MOVIE_TYPE) {
                     if (!isFavorite) {
-                        val movies = ArrayList<MovieFavEntity>()
                         val entity = getMovieFavEntity()
-                        movies.add(entity)
-                        viewModel.insertMovieFavorite(movies)
+                        viewModel.insertMovieFavorite(entity)
                     }
                     else {
                        viewModel.deleteMovie(getMovieFavEntity())
@@ -175,10 +170,8 @@ class DetailActivity : AppCompatActivity() {
                 }
                 else {
                     if (!isFavorite) {
-                        val tvShows = ArrayList<TVShowFavEntity>()
                         val entity = getTVShowFavEntity()
-                        tvShows.add(entity)
-                        viewModel.insertTVShowFavorite(tvShows)
+                        viewModel.insertTVShowFavorite(entity)
                     }
                     else {
                         viewModel.deleteTVShow(getTVShowFavEntity())

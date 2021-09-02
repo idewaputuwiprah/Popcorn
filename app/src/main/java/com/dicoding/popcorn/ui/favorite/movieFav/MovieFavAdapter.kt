@@ -8,7 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.dicoding.popcorn.R
-import com.dicoding.popcorn.data.local.MovieFavEntity
+import com.dicoding.popcorn.core.data.local.entity.MovieFavEntity
 import com.dicoding.popcorn.databinding.ItemsMovieBinding
 import java.lang.StringBuilder
 
