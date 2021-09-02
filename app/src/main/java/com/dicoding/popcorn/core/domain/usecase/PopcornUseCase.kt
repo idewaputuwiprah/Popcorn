@@ -17,19 +17,19 @@ interface PopcornUseCase {
 
     fun getDetailTVShows(id: Int): LiveData<Resource<Detail>>
 
-    fun getMovieFav(): LiveData<PagedList<MovieFavEntity>>
+    fun getMoviesFav(): LiveData<List<Movie>>
 
-    fun getMovieFavById(movieId: String): LiveData<MovieFavEntity>
+    fun getMovieFav(movieId: String): LiveData<Movie>
 
-    fun getTVShowFav(): LiveData<PagedList<TVShowFavEntity>>
+    fun getTVShowsFav(): LiveData<List<Movie>>
 
-    fun getTVShowFavById(tvId:String): LiveData<TVShowFavEntity>
+    fun getTVShowFav(tvId:String): LiveData<Movie>
 
-    fun insertMovieFav(movieFav: MovieFavEntity)
+    fun insertMovieFav(movieDetail: Detail)
 
-    fun insertTVShowFav(tvShowFav: TVShowFavEntity)
+    fun insertTVShowFav(tvShowDetail: Detail)
 
-    fun deleteMovieFav(movieFavEntity: MovieFavEntity)
+    fun deleteMovieFav(movieDetail: Detail)
 
-    fun deleteTVShowFav(tvShowFavEntity: TVShowFavEntity)
+    fun deleteTVShowFav(tvShowDetail: Detail)
 }

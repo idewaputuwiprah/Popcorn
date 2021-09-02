@@ -15,9 +15,9 @@ class LocalDataSource private constructor(private val popcornDAO: PopcornDAO) {
             INSTANCE ?: LocalDataSource(popcornDAO)
     }
 
-    fun getMovieFav(): DataSource.Factory<Int, MovieFavEntity> = popcornDAO.getMovieFav()
+    fun getMovieFav(): LiveData<List<MovieFavEntity>> = popcornDAO.getMovieFav()
 
-    fun getTVShowFav(): DataSource.Factory<Int, TVShowFavEntity> = popcornDAO.getTVShowFav()
+    fun getTVShowFav(): LiveData<List<TVShowFavEntity>> = popcornDAO.getTVShowFav()
 
     fun insertMovieFav(movieFav: MovieFavEntity) = popcornDAO.insertMovieFav(movieFav)
 

@@ -2,14 +2,9 @@ package com.dicoding.popcorn.core.data
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.MediatorLiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.paging.LivePagedListBuilder
-import androidx.paging.PagedList
+import androidx.lifecycle.Transformations
 import com.dicoding.popcorn.core.data.local.LocalDataSource
-import com.dicoding.popcorn.core.data.local.entity.MovieFavEntity
-import com.dicoding.popcorn.core.data.local.entity.TVShowFavEntity
 import com.dicoding.popcorn.core.data.remote.RemoteDataSource
-import com.dicoding.popcorn.core.data.remote.response.GenresItem
 import com.dicoding.popcorn.core.data.remote.network.ApiResponse
 import com.dicoding.popcorn.core.domain.model.Detail
 import com.dicoding.popcorn.core.domain.model.Movie
@@ -111,41 +106,47 @@ class PopcornRepository(
         return result
     }
 
-    override fun getMovieFav(): LiveData<PagedList<MovieFavEntity>> {
-        val config = PagedList.Config.Builder()
-            .setEnablePlaceholders(false)
-            .setInitialLoadSizeHint(4)
-            .setPageSize(4)
-            .build()
-        return LivePagedListBuilder(localDataSource.getMovieFav(), config).build()
+    override fun getMoviesFav(): LiveData<List<Movie>> {
+        return Transformations.map(localDataSource.getMovieFav()) {
+            DataMapper.mapMovieFavEntitiesToMovie(it)
+        }
     }
 
-    override fun getMovieFavById(movieId: String): LiveData<MovieFavEntity> = localDataSource.getMovieFavById(movieId)
-
-    override fun getTVShowFav(): LiveData<PagedList<TVShowFavEntity>> {
-        val config = PagedList.Config.Builder()
-                .setEnablePlaceholders(false)
-                .setInitialLoadSizeHint(4)
-                .setPageSize(4)
-                .build()
-        return LivePagedListBuilder(localDataSource.getTVShowFav(), config).build()
+    override fun getMovieFav(movieId: String): LiveData<Movie> {
+        return Transformations.map(localDataSource.getMovieFavById(movieId)) {
+            DataMapper.mapMovieFavEntityToMovie(it)
+        }
     }
 
-    override fun getTVShowFavById(tvId: String): LiveData<TVShowFavEntity> = localDataSource.getTVShowFavById(tvId)
+    override fun getTVShowsFav(): LiveData<List<Movie>> {
+        return Transformations.map(localDataSource.getTVShowFav()) {
+            DataMapper.mapTVShowFavEntitiesToMovie(it)
+        }
+    }
 
-    override fun insertMovieFav(movieFav: MovieFavEntity) {
+    override fun getTVShowFav(tvId: String): LiveData<Movie> {
+        return Transformations.map(localDataSource.getTVShowFavById(tvId)){
+            DataMapper.mapTVShowFavEntityToMovie(it)
+        }
+    }
+
+    override fun insertMovieFav(movieDetail: Detail) {
+        val movieFav = DataMapper.mapDetailToMovieFavEntity(movieDetail)
         appExecutors.diskIO().execute { localDataSource.insertMovieFav(movieFav) }
     }
 
-    override fun insertTVShowFav(tvShowFav: TVShowFavEntity) {
+    override fun insertTVShowFav(tvShowDetail: Detail) {
+        val tvShowFav = DataMapper.mapDetailToTVShowFavEntity(tvShowDetail)
         appExecutors.diskIO().execute { localDataSource.insertTVShowFav(tvShowFav) }
     }
 
-    override fun deleteMovieFav(movieFavEntity: MovieFavEntity) {
-        appExecutors.diskIO().execute { localDataSource.deleteMovie(movieFavEntity) }
+    override fun deleteMovieFav(movieDetail: Detail) {
+        val movieFav = DataMapper.mapDetailToMovieFavEntity(movieDetail)
+        appExecutors.diskIO().execute { localDataSource.deleteMovie(movieFav) }
     }
 
-    override fun deleteTVShowFav(tvShowFavEntity: TVShowFavEntity) {
-        appExecutors.diskIO().execute { localDataSource.deleteTVShow(tvShowFavEntity) }
+    override fun deleteTVShowFav(tvShowDetail: Detail) {
+        val tvShowFav = DataMapper.mapDetailToTVShowFavEntity(tvShowDetail)
+        appExecutors.diskIO().execute { localDataSource.deleteTVShow(tvShowFav) }
     }
 }

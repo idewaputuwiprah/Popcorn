@@ -10,7 +10,7 @@ import com.dicoding.popcorn.core.data.local.entity.TVShowFavEntity
 interface PopcornDAO {
 
     @Query("SELECT * FROM movieFav")
-    fun getMovieFav(): DataSource.Factory<Int, MovieFavEntity>
+    fun getMovieFav(): LiveData<List<MovieFavEntity>>
 
     @Transaction
     @Query("SELECT * FROM movieFav WHERE movieId = :movieId")
@@ -26,7 +26,7 @@ interface PopcornDAO {
     fun deleteMovieFav(movieFav: MovieFavEntity)
 
     @Query("SELECT * FROM tvShowFav")
-    fun getTVShowFav(): DataSource.Factory<Int, TVShowFavEntity>
+    fun getTVShowFav(): LiveData<List<TVShowFavEntity>>
 
     @Transaction
     @Query("SELECT * FROM tvShowFav WHERE tvShowId = :tvId")

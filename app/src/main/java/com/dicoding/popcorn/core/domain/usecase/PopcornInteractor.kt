@@ -1,10 +1,7 @@
 package com.dicoding.popcorn.core.domain.usecase
 
 import androidx.lifecycle.LiveData
-import androidx.paging.PagedList
 import com.dicoding.popcorn.core.data.Resource
-import com.dicoding.popcorn.core.data.local.entity.MovieFavEntity
-import com.dicoding.popcorn.core.data.local.entity.TVShowFavEntity
 import com.dicoding.popcorn.core.domain.model.Detail
 import com.dicoding.popcorn.core.domain.model.Movie
 import com.dicoding.popcorn.core.domain.repository.IPopcornRepository
@@ -22,31 +19,31 @@ class PopcornInteractor(private val popcornRepository: IPopcornRepository): Popc
     override fun getDetailTVShows(id: Int): LiveData<Resource<Detail>> =
         popcornRepository.getDetailTVShows(id)
 
-    override fun getMovieFav(): LiveData<PagedList<MovieFavEntity>> =
-        popcornRepository.getMovieFav()
+    override fun getMoviesFav(): LiveData<List<Movie>> =
+        popcornRepository.getMoviesFav()
 
-    override fun getMovieFavById(movieId: String): LiveData<MovieFavEntity> =
-        popcornRepository.getMovieFavById(movieId)
+    override fun getMovieFav(movieId: String): LiveData<Movie> =
+        popcornRepository.getMovieFav(movieId)
 
-    override fun getTVShowFav(): LiveData<PagedList<TVShowFavEntity>> =
-        popcornRepository.getTVShowFav()
+    override fun getTVShowsFav(): LiveData<List<Movie>> =
+        popcornRepository.getTVShowsFav()
 
-    override fun getTVShowFavById(tvId: String): LiveData<TVShowFavEntity> =
-        popcornRepository.getTVShowFavById(tvId)
+    override fun getTVShowFav(tvId: String): LiveData<Movie> =
+        popcornRepository.getTVShowFav(tvId)
 
-    override fun insertMovieFav(movieFav: MovieFavEntity) {
-        popcornRepository.insertMovieFav(movieFav)
+    override fun insertMovieFav(movieDetail: Detail) {
+        popcornRepository.insertMovieFav(movieDetail)
     }
 
-    override fun insertTVShowFav(tvShowFav: TVShowFavEntity) {
-        popcornRepository.insertTVShowFav(tvShowFav)
+    override fun insertTVShowFav(tvShowDetail: Detail) {
+        popcornRepository.insertTVShowFav(tvShowDetail)
     }
 
-    override fun deleteMovieFav(movieFavEntity: MovieFavEntity) {
-        popcornRepository.deleteMovieFav(movieFavEntity)
+    override fun deleteMovieFav(movieDetail: Detail) {
+        popcornRepository.deleteMovieFav(movieDetail)
     }
 
-    override fun deleteTVShowFav(tvShowFavEntity: TVShowFavEntity) {
-        popcornRepository.deleteTVShowFav(tvShowFavEntity)
+    override fun deleteTVShowFav(tvShowDetail: Detail) {
+        popcornRepository.deleteTVShowFav(tvShowDetail)
     }
 }

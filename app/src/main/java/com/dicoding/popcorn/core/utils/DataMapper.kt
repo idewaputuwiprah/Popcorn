@@ -1,5 +1,7 @@
 package com.dicoding.popcorn.core.utils
 
+import com.dicoding.popcorn.core.data.local.entity.MovieFavEntity
+import com.dicoding.popcorn.core.data.local.entity.TVShowFavEntity
 import com.dicoding.popcorn.core.data.remote.response.*
 import com.dicoding.popcorn.core.domain.model.Detail
 import com.dicoding.popcorn.core.domain.model.Movie
@@ -56,7 +58,7 @@ object DataMapper {
         )
 
     fun mapDetailTVShowResponseToDetailEntity(input: DetailTVShowsResponse) =
-        Detail(
+        Detail (
             movieId = input.id.toString(),
             title = input.name,
             rating = input.voteAverage.toString(),
@@ -69,6 +71,80 @@ object DataMapper {
             writers = "-",
             stars = "-",
             backdrop = "https://image.tmdb.org/t/p/w500${input.backdropPath}"
+        )
+
+    fun mapMovieFavEntitiesToMovie(input: List<MovieFavEntity>): List<Movie> =
+        input.map { movie->
+            Movie(
+                movieId = movie.movieId,
+                title = movie.title,
+                rating = movie.rating,
+                year = movie.year,
+                tags = movie.tags,
+                path = movie.path,
+                duration = "-"
+            )
+        }
+
+    fun mapTVShowFavEntitiesToMovie(input: List<TVShowFavEntity>): List<Movie> =
+        input.map { tvShow->
+            Movie(
+                movieId = tvShow.tvShowId,
+                title = tvShow.title,
+                rating = tvShow.rating,
+                year = tvShow.year,
+                tags = tvShow.tags,
+                path = tvShow.path,
+                duration = "-"
+            )
+        }
+
+    fun mapMovieFavEntityToMovie(input: MovieFavEntity?): Movie? =
+        input?.let {
+            Movie(
+                movieId = it.movieId,
+                title = input.title,
+                rating = input.rating,
+                year = input.year,
+                tags = input.tags,
+                path = input.path,
+                duration = "-"
+            )
+        }
+
+    fun mapTVShowFavEntityToMovie(input: TVShowFavEntity?): Movie? =
+        input?.let {
+            Movie(
+                movieId = it.tvShowId,
+                title = input.title,
+                rating = input.rating,
+                year = input.year,
+                tags = input.tags,
+                path = input.path,
+                duration = "-"
+            )
+        }
+
+    fun mapDetailToMovieFavEntity(input: Detail) =
+        MovieFavEntity(
+            movieId = input.movieId,
+            title = input.title,
+            rating = input.rating,
+            year = input.year,
+            tags = input.tags.joinToString(),
+            path = input.path,
+            duration = input.duration
+        )
+
+    fun mapDetailToTVShowFavEntity(input: Detail) =
+        TVShowFavEntity(
+            tvShowId = input.movieId,
+            title = input.title,
+            rating = input.rating,
+            year = input.year,
+            tags = input.tags.joinToString(),
+            path = input.path,
+            duration = input.duration
         )
 
     private fun getDuration(duration: Int): String {

@@ -15,8 +15,6 @@ import com.bumptech.glide.request.RequestOptions
 import com.dicoding.popcorn.R
 import com.dicoding.popcorn.core.domain.model.Detail
 import com.dicoding.popcorn.core.data.Resource
-import com.dicoding.popcorn.core.data.local.entity.MovieFavEntity
-import com.dicoding.popcorn.core.data.local.entity.TVShowFavEntity
 import com.dicoding.popcorn.databinding.ActivityDetailBinding
 import com.dicoding.popcorn.databinding.ContentDetailBinding
 import com.dicoding.popcorn.core.ui.ViewModelFactory
@@ -136,15 +134,15 @@ class DetailActivity : AppCompatActivity() {
         menuInflater.inflate(R.menu.menu_detail, menu)
         this.menu = menu
         if (type == MOVIE_TYPE) {
-            viewModel.getMovieFavorite().observe(this, { movie ->
-                this.isFavorite = movie != null
+            viewModel.getMovieFavorite().observe(this) { movieFav->
+                this.isFavorite = movieFav != null
                 setBookmarkState()
-            })
+            }
         } else {
-            viewModel.getTVShowFavorite().observe(this, { tvShow->
-                this.isFavorite = tvShow != null
+            viewModel.getTVShowFavorite().observe(this) { tvShowFav->
+                this.isFavorite = tvShowFav != null
                 setBookmarkState()
-            })
+            }
         }
         return true
     }
@@ -161,58 +159,22 @@ class DetailActivity : AppCompatActivity() {
             R.id.action_favorite -> {
                 if (type == MOVIE_TYPE) {
                     if (!isFavorite) {
-                        val entity = getMovieFavEntity()
-                        viewModel.insertMovieFavorite(entity)
+                        viewModel.insertMovieFavorite(viewModel.item!!)
                     }
                     else {
-                       viewModel.deleteMovie(getMovieFavEntity())
+                       viewModel.deleteMovie(viewModel.item!!)
                     }
                 }
                 else {
                     if (!isFavorite) {
-                        val entity = getTVShowFavEntity()
-                        viewModel.insertTVShowFavorite(entity)
+                        viewModel.insertTVShowFavorite(viewModel.item!!)
                     }
                     else {
-                        viewModel.deleteTVShow(getTVShowFavEntity())
+                        viewModel.deleteTVShow(viewModel.item!!)
                     }
                 }
             }
         }
         return super.onOptionsItemSelected(item)
-    }
-
-    private fun getMovieFavEntity(): MovieFavEntity {
-        lateinit var movieFav: MovieFavEntity
-        val detail = viewModel.item
-        if (detail != null) {
-            movieFav = MovieFavEntity(
-                movieId = detail.movieId,
-                title = detail.title,
-                rating = detail.rating,
-                year = detail.year,
-                tags = detail.tags.joinToString(),
-                path = detail.path,
-                duration = detail.duration
-            )
-        }
-        return movieFav
-    }
-
-    private fun getTVShowFavEntity(): TVShowFavEntity {
-        lateinit var tvFav: TVShowFavEntity
-        val detail = viewModel.item
-        if (detail != null) {
-            tvFav = TVShowFavEntity(
-                tvShowId = detail.movieId,
-                title = detail.title,
-                rating = detail.rating,
-                year = detail.year,
-                tags = detail.tags.joinToString(),
-                path = detail.path,
-                duration = detail.duration
-            )
-        }
-        return tvFav
     }
 }

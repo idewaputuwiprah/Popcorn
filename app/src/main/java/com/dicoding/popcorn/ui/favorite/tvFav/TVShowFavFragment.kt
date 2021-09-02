@@ -8,15 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dicoding.popcorn.core.data.local.entity.TVShowFavEntity
+import com.dicoding.popcorn.core.domain.model.Movie
 import com.dicoding.popcorn.databinding.FragmentTVShowBinding
 import com.dicoding.popcorn.ui.detail.DetailActivity
 import com.dicoding.popcorn.core.ui.ViewModelFactory
+import com.dicoding.popcorn.ui.home.ItemCallback
+import com.dicoding.popcorn.ui.tvshow.TVShowAdapter
 
 class TVShowFavFragment : Fragment() {
     private lateinit var fragmentTVShowBinding: FragmentTVShowBinding
     private lateinit var viewModel: TVShowFavViewModel
-    private lateinit var tvShowAdapter: TVShowFavAdapter
+    private lateinit var tvShowAdapter: TVShowAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         fragmentTVShowBinding = FragmentTVShowBinding.inflate(inflater, container, false)
@@ -27,20 +29,19 @@ class TVShowFavFragment : Fragment() {
         super.onViewCreated(view, savedInstanceState)
         val factory = ViewModelFactory.getInstance(requireActivity())
         viewModel = ViewModelProvider(this, factory)[TVShowFavViewModel::class.java]
-        tvShowAdapter = TVShowFavAdapter()
+        tvShowAdapter = TVShowAdapter()
 
-        tvShowAdapter.setOnClickListener(object : TVShowFavCallback{
-            override fun onClick(data: TVShowFavEntity) {
+        tvShowAdapter.setOnClickListener(object : ItemCallback {
+            override fun onClick(data: Movie) {
                 val intent = Intent(context, DetailActivity::class.java)
                 intent.apply {
                     putExtra(DetailActivity.ITEM_TYPE, DetailActivity.TV_SHOW_TYPE)
-                    putExtra(DetailActivity.ITEM_ID, data.tvShowId)
+                    putExtra(DetailActivity.ITEM_ID, data.movieId)
                 }
                 startActivity(intent)
             }
         })
 
-        setUpLoadingObserver()
         setUpTVShowObserver()
 
         with(fragmentTVShowBinding.rvTvshows) {
@@ -52,23 +53,14 @@ class TVShowFavFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-//        if (!viewModel.getLoadingStatus().hasActiveObservers()) {
-//            setUpLoadingObserver()
-//        }
         if (!viewModel.getFavTVShows().hasActiveObservers()) {
             setUpTVShowObserver()
         }
     }
 
-    private fun setUpLoadingObserver() {
-//        viewModel.getLoadingStatus().observe(requireActivity(), {
-//            fragmentTVShowBinding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
-//        })
-    }
-
     private fun setUpTVShowObserver() {
         viewModel.getFavTVShows().observe(requireActivity(), { tvShows->
-            tvShowAdapter.submitList(tvShows)
+            tvShowAdapter.setShows(tvShows)
             if (tvShows.isNotEmpty()) {
                 fragmentTVShowBinding.tvTvshowsNull.visibility = View.GONE
             }

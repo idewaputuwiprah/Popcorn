@@ -8,15 +8,17 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
-import com.dicoding.popcorn.core.data.local.entity.MovieFavEntity
+import com.dicoding.popcorn.core.domain.model.Movie
 import com.dicoding.popcorn.databinding.FragmentMovieBinding
 import com.dicoding.popcorn.ui.detail.DetailActivity
 import com.dicoding.popcorn.core.ui.ViewModelFactory
+import com.dicoding.popcorn.ui.home.ItemCallback
+import com.dicoding.popcorn.ui.movie.MovieAdapter
 
 class MovieFavFragment : Fragment() {
     private lateinit var fragmentMovieBinding: FragmentMovieBinding
     private lateinit var viewModel: MovieFavViewModel
-    private lateinit var movieAdapter: MovieFavAdapter
+    private lateinit var movieAdapter: MovieAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         fragmentMovieBinding = FragmentMovieBinding.inflate(inflater, container, false)
@@ -28,10 +30,10 @@ class MovieFavFragment : Fragment() {
         if (activity != null) {
             val factory = ViewModelFactory.getInstance(requireActivity())
             viewModel = ViewModelProvider(this, factory)[MovieFavViewModel::class.java]
-            movieAdapter = MovieFavAdapter()
+            movieAdapter = MovieAdapter()
 
-            movieAdapter.setOnClickListener(object : MovieFavCallback{
-                override fun onClick(data: MovieFavEntity) {
+            movieAdapter.setOnClickListener(object : ItemCallback {
+                override fun onClick(data: Movie) {
                     val intent = Intent(context, DetailActivity::class.java)
                     intent.apply {
                         putExtra(DetailActivity.ITEM_TYPE, DetailActivity.MOVIE_TYPE)
@@ -41,7 +43,6 @@ class MovieFavFragment : Fragment() {
                 }
             })
 
-//            setUpLoadingObserver()
             setUpMovieObserver()
 
             with(fragmentMovieBinding.rvMovies) {
@@ -54,23 +55,14 @@ class MovieFavFragment : Fragment() {
 
     override fun onResume() {
         super.onResume()
-//        if (!viewModel.getLoadingStatus().hasActiveObservers()) {
-//            setUpLoadingObserver()
-//        }
         if (!viewModel.getFavMovies().hasActiveObservers()) {
             setUpMovieObserver()
         }
     }
 
-//    private fun setUpLoadingObserver() {
-//        viewModel.getLoadingStatus().observe(requireActivity(), {
-//            fragmentMovieBinding.progressBar.visibility = if (it) View.VISIBLE else View.GONE
-//        })
-//    }
-
     private fun setUpMovieObserver() {
         viewModel.getFavMovies().observe(requireActivity(), { movies->
-            movieAdapter.submitList(movies)
+            movieAdapter.setMovie(movies)
             if (movies.isNotEmpty()) {
                 fragmentMovieBinding.tvMoviesNull.visibility = View.INVISIBLE
             }
