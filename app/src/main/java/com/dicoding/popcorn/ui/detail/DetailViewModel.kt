@@ -2,6 +2,7 @@ package com.dicoding.popcorn.ui.detail
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
+import androidx.lifecycle.asLiveData
 import com.dicoding.popcorn.core.domain.model.Detail
 import com.dicoding.popcorn.core.data.Resource
 import com.dicoding.popcorn.core.domain.model.Movie
@@ -15,9 +16,9 @@ class DetailViewModel(private val popcornUseCase: PopcornUseCase) : ViewModel() 
         this.itemId = itemId
     }
 
-    fun getRemoteMovieDetail(): LiveData<Resource<Detail>> = popcornUseCase.getDetailMovie(itemId.toInt())
+    fun getRemoteMovieDetail(): LiveData<Resource<Detail>> = popcornUseCase.getDetailMovie(itemId.toInt()).asLiveData()
 
-    fun getRemoteTVShowDetail(): LiveData<Resource<Detail>> = popcornUseCase.getDetailTVShows(itemId.toInt())
+    fun getRemoteTVShowDetail(): LiveData<Resource<Detail>> = popcornUseCase.getDetailTVShows(itemId.toInt()).asLiveData()
 
     fun insertMovieFavorite(movieDetail: Detail) {
         popcornUseCase.insertMovieFav(movieDetail)

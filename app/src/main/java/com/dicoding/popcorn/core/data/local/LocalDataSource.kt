@@ -1,7 +1,6 @@
 package com.dicoding.popcorn.core.data.local
 
 import androidx.lifecycle.LiveData
-import androidx.paging.DataSource
 import com.dicoding.popcorn.core.data.local.entity.MovieFavEntity
 import com.dicoding.popcorn.core.data.local.entity.TVShowFavEntity
 import com.dicoding.popcorn.core.data.local.room.PopcornDAO

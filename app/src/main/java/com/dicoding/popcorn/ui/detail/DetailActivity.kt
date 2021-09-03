@@ -45,6 +45,8 @@ class DetailActivity : AppCompatActivity() {
         contentDetailBinding = activityDetailBinding.detailContent
         StatusBarUtil.setTransparent(this)
 
+        contentDetailBinding.progressBar.visibility = View.VISIBLE
+
         val itemType = intent.getStringExtra(ITEM_TYPE)
         val itemId = intent.getStringExtra(ITEM_ID)
         if (itemId != null && itemType != null) {
@@ -113,6 +115,7 @@ class DetailActivity : AppCompatActivity() {
                         .error(R.drawable.ic_error)
                 )
                 .into(imgPoster)
+            progressBar.visibility = View.GONE
         }
     }
 

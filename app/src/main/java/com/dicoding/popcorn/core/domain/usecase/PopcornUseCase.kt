@@ -1,21 +1,19 @@
 package com.dicoding.popcorn.core.domain.usecase
 
 import androidx.lifecycle.LiveData
-import androidx.paging.PagedList
 import com.dicoding.popcorn.core.data.Resource
-import com.dicoding.popcorn.core.data.local.entity.MovieFavEntity
-import com.dicoding.popcorn.core.data.local.entity.TVShowFavEntity
 import com.dicoding.popcorn.core.domain.model.Detail
 import com.dicoding.popcorn.core.domain.model.Movie
+import kotlinx.coroutines.flow.Flow
 
 interface PopcornUseCase {
-    fun getRemoteMovies(): LiveData<Resource<List<Movie>>>
+    fun getRemoteMovies(): Flow<Resource<List<Movie>>>
 
-    fun getDetailMovie(id: Int): LiveData<Resource<Detail>>
+    fun getDetailMovie(id: Int): Flow<Resource<Detail>>
 
-    fun getRemoteTVShows(): LiveData<Resource<List<Movie>>>
+    fun getRemoteTVShows(): Flow<Resource<List<Movie>>>
 
-    fun getDetailTVShows(id: Int): LiveData<Resource<Detail>>
+    fun getDetailTVShows(id: Int): Flow<Resource<Detail>>
 
     fun getMoviesFav(): LiveData<List<Movie>>
 

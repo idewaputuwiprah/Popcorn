@@ -11,6 +11,9 @@ import com.dicoding.popcorn.core.domain.model.Movie
 import com.dicoding.popcorn.core.domain.repository.IPopcornRepository
 import com.dicoding.popcorn.core.utils.AppExecutors
 import com.dicoding.popcorn.core.utils.DataMapper
+import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.first
+import kotlinx.coroutines.flow.flow
 
 class PopcornRepository(
     private val remoteDataSource: RemoteDataSource,
@@ -28,83 +31,76 @@ class PopcornRepository(
             }
     }
 
-    override fun getRemoteMovies(): LiveData<Resource<List<Movie>>> {
-        val result = MediatorLiveData<Resource<List<Movie>>>()
-        val apiResponse = remoteDataSource.getMovies()
-        result.addSource(apiResponse) { response->
-            result.removeSource(apiResponse)
-            when (response) {
-                is ApiResponse.SUCCESS -> {
-                    val movieList = DataMapper.mapMovieResponseToMovies(response.data)
-                    result.value = Resource.Success(movieList)
-                }
-                is ApiResponse.ERROR -> {
-                    result.value = Resource.Error(response.errorMessage, null)
-                }
-                is ApiResponse.Empty -> {
-                    result.value = Resource.Success(emptyList())
-                }
+    override fun getRemoteMovies(): Flow<Resource<List<Movie>>> = flow {
+        when (val apiResponse = remoteDataSource.getMovies().first()) {
+            is ApiResponse.SUCCESS -> {
+                val movieList = DataMapper.mapMovieResponseToMovies(apiResponse.data)
+                emit(Resource.Success(movieList))
+            }
+            is ApiResponse.Empty -> {
+                emit(Resource.Success(emptyList<Movie>()))
+            }
+            is ApiResponse.ERROR -> {
+                emit(Resource.Error<List<Movie>>(apiResponse.errorMessage))
             }
         }
-        return result
     }
 
-    override fun getDetailMovie(id: Int): LiveData<Resource<Detail>> {
-        val result = MediatorLiveData<Resource<Detail>>()
-        val apiResponse = remoteDataSource.getMovieDetail(id)
-        result.addSource(apiResponse) { response->
-            when (response) {
-                is ApiResponse.SUCCESS -> {
-                    val detail = DataMapper.mapDetailMovieResponseToDetailEntity(response.data)
-                    result.value = Resource.Success(detail)
-                }
-                is ApiResponse.ERROR -> {
-                    result.value = Resource.Error(response.errorMessage, null)
-                }
-                else -> Unit
+    override fun getDetailMovie(id: Int): Flow<Resource<Detail>> = flow {
+        when (val apiResponse = remoteDataSource.getMovieDetail(id).first()) {
+            is ApiResponse.SUCCESS -> {
+                val detail = DataMapper.mapDetailMovieResponseToDetailEntity(apiResponse.data)
+                emit(Resource.Success(detail))
+            }
+            is ApiResponse.ERROR -> {
+                emit(Resource.Error<Detail>(apiResponse.errorMessage))
             }
         }
-        return result
     }
 
-    override fun getRemoteTVShows(): LiveData<Resource<List<Movie>>> {
-        val result = MediatorLiveData<Resource<List<Movie>>>()
-        val apiResponse = remoteDataSource.getTVShows()
-        result.addSource(apiResponse) { response->
-            result.removeSource(apiResponse)
-            when (response) {
-                is ApiResponse.SUCCESS -> {
-                    val tvShowList = DataMapper.mapTVShowResponseToMovies(response.data)
-                    result.value = Resource.Success(tvShowList)
-                }
-                is ApiResponse.ERROR -> {
-                    result.value = Resource.Error(response.errorMessage)
-                }
-                is ApiResponse.Empty -> {
-                    result.value = Resource.Success(emptyList())
-                }
+    override fun getRemoteTVShows(): Flow<Resource<List<Movie>>> = flow {
+        when (val apiResponse = remoteDataSource.getTVShows().first()) {
+            is ApiResponse.SUCCESS -> {
+                val tvShowList = DataMapper.mapTVShowResponseToMovies(apiResponse.data)
+                emit(Resource.Success(tvShowList))
+            }
+            is ApiResponse.Empty -> {
+                emit(Resource.Success(emptyList<Movie>()))
+            }
+            is ApiResponse.ERROR -> {
+                emit(Resource.Error<List<Movie>>(apiResponse.errorMessage))
             }
         }
-        return result
     }
 
-    override fun getDetailTVShows(id: Int): LiveData<Resource<Detail>> {
-        val result = MediatorLiveData<Resource<Detail>>()
-        val apiResponse = remoteDataSource.getTVShowDetail(id)
-        result.addSource(apiResponse) { response->
-            when (response) {
-                is ApiResponse.SUCCESS -> {
-                    val detail = DataMapper.mapDetailTVShowResponseToDetailEntity(response.data)
-                    result.value = Resource.Success(detail)
-                }
-                is ApiResponse.ERROR -> {
-                    result.value = Resource.Error(response.errorMessage)
-                }
-                else -> Unit
+    override fun getDetailTVShows(id: Int): Flow<Resource<Detail>> = flow {
+        when (val apiResponse = remoteDataSource.getTVShowDetail(id).first()) {
+            is ApiResponse.SUCCESS -> {
+                val detail = DataMapper.mapDetailTVShowResponseToDetailEntity(apiResponse.data)
+                emit(Resource.Success(detail))
+            }
+            is ApiResponse.ERROR -> {
+                emit(Resource.Error<Detail>(apiResponse.errorMessage))
             }
         }
-        return result
     }
+//    {
+//        val result = MediatorLiveData<Resource<Detail>>()
+//        val apiResponse = remoteDataSource.getTVShowDetail(id)
+//        result.addSource(apiResponse) { response->
+//            when (response) {
+//                is ApiResponse.SUCCESS -> {
+//                    val detail = DataMapper.mapDetailTVShowResponseToDetailEntity(response.data)
+//                    result.value = Resource.Success(detail)
+//                }
+//                is ApiResponse.ERROR -> {
+//                    result.value = Resource.Error(response.errorMessage)
+//                }
+//                else -> Unit
+//            }
+//        }
+//        return result
+//    }
 
     override fun getMoviesFav(): LiveData<List<Movie>> {
         return Transformations.map(localDataSource.getMovieFav()) {

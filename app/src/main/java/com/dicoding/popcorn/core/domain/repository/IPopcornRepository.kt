@@ -4,15 +4,16 @@ import androidx.lifecycle.LiveData
 import com.dicoding.popcorn.core.domain.model.Detail
 import com.dicoding.popcorn.core.domain.model.Movie
 import com.dicoding.popcorn.core.data.Resource
+import kotlinx.coroutines.flow.Flow
 
 interface IPopcornRepository {
-    fun getRemoteMovies(): LiveData<Resource<List<Movie>>>
+    fun getRemoteMovies(): Flow<Resource<List<Movie>>>
 
-    fun getDetailMovie(id: Int): LiveData<Resource<Detail>>
+    fun getDetailMovie(id: Int): Flow<Resource<Detail>>
 
-    fun getRemoteTVShows(): LiveData<Resource<List<Movie>>>
+    fun getRemoteTVShows(): Flow<Resource<List<Movie>>>
 
-    fun getDetailTVShows(id: Int): LiveData<Resource<Detail>>
+    fun getDetailTVShows(id: Int): Flow<Resource<Detail>>
 
     fun getMoviesFav(): LiveData<List<Movie>>
 

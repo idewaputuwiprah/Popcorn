@@ -5,18 +5,19 @@ import com.dicoding.popcorn.core.data.Resource
 import com.dicoding.popcorn.core.domain.model.Detail
 import com.dicoding.popcorn.core.domain.model.Movie
 import com.dicoding.popcorn.core.domain.repository.IPopcornRepository
+import kotlinx.coroutines.flow.Flow
 
 class PopcornInteractor(private val popcornRepository: IPopcornRepository): PopcornUseCase {
-    override fun getRemoteMovies(): LiveData<Resource<List<Movie>>> =
+    override fun getRemoteMovies(): Flow<Resource<List<Movie>>> =
         popcornRepository.getRemoteMovies()
 
-    override fun getDetailMovie(id: Int): LiveData<Resource<Detail>> =
+    override fun getDetailMovie(id: Int): Flow<Resource<Detail>> =
         popcornRepository.getDetailMovie(id)
 
-    override fun getRemoteTVShows(): LiveData<Resource<List<Movie>>> =
+    override fun getRemoteTVShows(): Flow<Resource<List<Movie>>> =
         popcornRepository.getRemoteTVShows()
 
-    override fun getDetailTVShows(id: Int): LiveData<Resource<Detail>> =
+    override fun getDetailTVShows(id: Int): Flow<Resource<Detail>> =
         popcornRepository.getDetailTVShows(id)
 
     override fun getMoviesFav(): LiveData<List<Movie>> =
