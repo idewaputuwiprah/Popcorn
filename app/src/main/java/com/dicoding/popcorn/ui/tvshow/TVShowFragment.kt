@@ -6,18 +6,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.popcorn.core.data.Resource
 import com.dicoding.popcorn.core.domain.model.Movie
 import com.dicoding.popcorn.databinding.FragmentTVShowBinding
 import com.dicoding.popcorn.ui.detail.DetailActivity
 import com.dicoding.popcorn.ui.home.ItemCallback
-import com.dicoding.popcorn.core.ui.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TVShowFragment : Fragment() {
     private lateinit var fragmentTVShowBinding: FragmentTVShowBinding
     private lateinit var tvShowAdapter: TVShowAdapter
+    private val viewModel: TVShowViewModel by viewModels()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         fragmentTVShowBinding = FragmentTVShowBinding.inflate(inflater, container, false)
@@ -26,8 +28,6 @@ class TVShowFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val factory = ViewModelFactory.getInstance(requireActivity())
-        val viewModel = ViewModelProvider(this, factory)[TVShowViewModel::class.java]
         tvShowAdapter = TVShowAdapter()
 
         tvShowAdapter.setOnClickListener(object : ItemCallback{
@@ -41,8 +41,18 @@ class TVShowFragment : Fragment() {
             }
         })
 
+        subscribeToObserver()
+
         fragmentTVShowBinding.progressBar.visibility = View.VISIBLE
 
+        with(fragmentTVShowBinding.rvTvshows) {
+            layoutManager = LinearLayoutManager(context)
+            setHasFixedSize(true)
+            this.adapter = tvShowAdapter
+        }
+    }
+
+    private fun subscribeToObserver() {
         viewModel.getRemoteTVShows().observe(requireActivity(), { tvShows->
             if (tvShows != null) {
                 when (tvShows) {
@@ -62,11 +72,5 @@ class TVShowFragment : Fragment() {
                 }
             }
         })
-
-        with(fragmentTVShowBinding.rvTvshows) {
-            layoutManager = LinearLayoutManager(context)
-            setHasFixedSize(true)
-            this.adapter = tvShowAdapter
-        }
     }
 }

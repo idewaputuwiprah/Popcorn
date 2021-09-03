@@ -6,18 +6,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.popcorn.core.domain.model.Movie
 import com.dicoding.popcorn.databinding.FragmentMovieBinding
 import com.dicoding.popcorn.ui.detail.DetailActivity
-import com.dicoding.popcorn.core.ui.ViewModelFactory
 import com.dicoding.popcorn.ui.home.ItemCallback
 import com.dicoding.popcorn.ui.movie.MovieAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MovieFavFragment : Fragment() {
     private lateinit var fragmentMovieBinding: FragmentMovieBinding
-    private lateinit var viewModel: MovieFavViewModel
+    private val viewModel: MovieFavViewModel by viewModels()
     private lateinit var movieAdapter: MovieAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -28,8 +29,6 @@ class MovieFavFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (activity != null) {
-            val factory = ViewModelFactory.getInstance(requireActivity())
-            viewModel = ViewModelProvider(this, factory)[MovieFavViewModel::class.java]
             movieAdapter = MovieAdapter()
 
             movieAdapter.setOnClickListener(object : ItemCallback {

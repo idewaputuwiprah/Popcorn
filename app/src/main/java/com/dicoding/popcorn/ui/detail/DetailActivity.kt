@@ -4,12 +4,12 @@ import android.os.Bundle
 import android.view.Menu
 import android.view.MenuItem
 import android.view.View
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import androidx.lifecycle.ViewModelProvider
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.dicoding.popcorn.R
@@ -17,9 +17,10 @@ import com.dicoding.popcorn.core.domain.model.Detail
 import com.dicoding.popcorn.core.data.Resource
 import com.dicoding.popcorn.databinding.ActivityDetailBinding
 import com.dicoding.popcorn.databinding.ContentDetailBinding
-import com.dicoding.popcorn.core.ui.ViewModelFactory
 import com.jaeger.library.StatusBarUtil
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class DetailActivity : AppCompatActivity() {
     companion object {
         const val ITEM_TYPE = "type"
@@ -29,7 +30,7 @@ class DetailActivity : AppCompatActivity() {
     }
     private lateinit var activityDetailBinding: ActivityDetailBinding
     private lateinit var contentDetailBinding: ContentDetailBinding
-    private lateinit var viewModel: DetailViewModel
+    private val viewModel: DetailViewModel by viewModels()
     private var menu: Menu? = null
     private var type = ""
     private var isFavorite = false
@@ -51,8 +52,7 @@ class DetailActivity : AppCompatActivity() {
         val itemId = intent.getStringExtra(ITEM_ID)
         if (itemId != null && itemType != null) {
             this.type = itemType
-            val factory = ViewModelFactory.getInstance(this)
-            viewModel = ViewModelProvider(this, factory)[DetailViewModel::class.java]
+
             viewModel.setItem(itemId)
             supportActionBar?.title  = if (itemType == MOVIE_TYPE)
                 resources.getString(R.string.movie_detail)

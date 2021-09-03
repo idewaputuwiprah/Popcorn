@@ -6,17 +6,20 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.popcorn.core.domain.model.Movie
 import com.dicoding.popcorn.core.data.Resource
 import com.dicoding.popcorn.databinding.FragmentMovieBinding
 import com.dicoding.popcorn.ui.detail.DetailActivity
 import com.dicoding.popcorn.ui.home.ItemCallback
-import com.dicoding.popcorn.core.ui.ViewModelFactory
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class MovieFragment : Fragment() {
     private lateinit var fragmentMovieBinding: FragmentMovieBinding
+    private val viewModel: MovieViewModel by viewModels()
+    private lateinit var movieAdapter: MovieAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         fragmentMovieBinding = FragmentMovieBinding.inflate(inflater, container, false)
@@ -26,11 +29,9 @@ class MovieFragment : Fragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         if (activity != null) {
-            val factory = ViewModelFactory.getInstance(requireActivity())
-            val viewModel = ViewModelProvider(this, factory)[MovieViewModel::class.java]
-            val adapter = MovieAdapter()
+            movieAdapter = MovieAdapter()
 
-            adapter.setOnClickListener(object : ItemCallback{
+            movieAdapter.setOnClickListener(object : ItemCallback{
                 override fun onClick(data: Movie) {
                     val intent = Intent(context, DetailActivity::class.java)
                     intent.apply {
@@ -43,31 +44,35 @@ class MovieFragment : Fragment() {
 
             fragmentMovieBinding.progressBar.visibility = View.VISIBLE
 
-            viewModel.movies.observe(requireActivity(), { movies->
-                if (movies != null) {
-                    when (movies) {
-                        is Resource.Success -> {
-                            adapter.setMovie(movies.data)
-                            fragmentMovieBinding.apply {
-                                tvMoviesNull.visibility = View.GONE
-                                progressBar.visibility = View.GONE
-                            }
-                        }
-                        is Resource.Error -> {
-                            fragmentMovieBinding.apply {
-                                tvMoviesNull.visibility = View.VISIBLE
-                                progressBar.visibility = View.GONE
-                            }
-                        }
-                    }
-                }
-            })
+            subscribeToObserver()
 
             with(fragmentMovieBinding.rvMovies) {
                 layoutManager = LinearLayoutManager(context)
                 setHasFixedSize(true)
-                this.adapter = adapter
+                this.adapter = movieAdapter
             }
         }
+    }
+
+    private fun subscribeToObserver() {
+        viewModel.movies.observe(requireActivity(), { movies->
+            if (movies != null) {
+                when (movies) {
+                    is Resource.Success -> {
+                        movieAdapter.setMovie(movies.data)
+                        fragmentMovieBinding.apply {
+                            tvMoviesNull.visibility = View.GONE
+                            progressBar.visibility = View.GONE
+                        }
+                    }
+                    is Resource.Error -> {
+                        fragmentMovieBinding.apply {
+                            tvMoviesNull.visibility = View.VISIBLE
+                            progressBar.visibility = View.GONE
+                        }
+                    }
+                }
+            }
+        })
     }
 }

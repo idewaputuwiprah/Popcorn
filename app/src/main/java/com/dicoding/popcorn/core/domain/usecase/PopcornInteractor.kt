@@ -1,13 +1,13 @@
 package com.dicoding.popcorn.core.domain.usecase
 
-import androidx.lifecycle.LiveData
 import com.dicoding.popcorn.core.data.Resource
 import com.dicoding.popcorn.core.domain.model.Detail
 import com.dicoding.popcorn.core.domain.model.Movie
 import com.dicoding.popcorn.core.domain.repository.IPopcornRepository
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
 
-class PopcornInteractor(private val popcornRepository: IPopcornRepository): PopcornUseCase {
+class PopcornInteractor @Inject constructor(private val popcornRepository: IPopcornRepository): PopcornUseCase {
     override fun getRemoteMovies(): Flow<Resource<List<Movie>>> =
         popcornRepository.getRemoteMovies()
 

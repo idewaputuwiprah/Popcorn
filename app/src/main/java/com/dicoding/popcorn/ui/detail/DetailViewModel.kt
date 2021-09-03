@@ -8,10 +8,13 @@ import com.dicoding.popcorn.core.domain.model.Detail
 import com.dicoding.popcorn.core.data.Resource
 import com.dicoding.popcorn.core.domain.model.Movie
 import com.dicoding.popcorn.core.domain.usecase.PopcornUseCase
+import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.launch
+import javax.inject.Inject
 
-class DetailViewModel(private val popcornUseCase: PopcornUseCase) : ViewModel() {
+@HiltViewModel
+class DetailViewModel @Inject constructor(private val popcornUseCase: PopcornUseCase) : ViewModel() {
     private lateinit var itemId: String
     var item: Detail? = null
 

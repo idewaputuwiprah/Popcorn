@@ -6,18 +6,19 @@ import androidx.fragment.app.Fragment
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.lifecycle.ViewModelProvider
+import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.dicoding.popcorn.core.domain.model.Movie
 import com.dicoding.popcorn.databinding.FragmentTVShowBinding
 import com.dicoding.popcorn.ui.detail.DetailActivity
-import com.dicoding.popcorn.core.ui.ViewModelFactory
 import com.dicoding.popcorn.ui.home.ItemCallback
 import com.dicoding.popcorn.ui.tvshow.TVShowAdapter
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class TVShowFavFragment : Fragment() {
     private lateinit var fragmentTVShowBinding: FragmentTVShowBinding
-    private lateinit var viewModel: TVShowFavViewModel
+    private val viewModel: TVShowFavViewModel by viewModels()
     private lateinit var tvShowAdapter: TVShowAdapter
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
@@ -27,8 +28,6 @@ class TVShowFavFragment : Fragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val factory = ViewModelFactory.getInstance(requireActivity())
-        viewModel = ViewModelProvider(this, factory)[TVShowFavViewModel::class.java]
         tvShowAdapter = TVShowAdapter()
 
         tvShowAdapter.setOnClickListener(object : ItemCallback {

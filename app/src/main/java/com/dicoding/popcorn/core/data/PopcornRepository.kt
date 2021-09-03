@@ -1,7 +1,5 @@
 package com.dicoding.popcorn.core.data
 
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.Transformations
 import com.dicoding.popcorn.core.data.local.LocalDataSource
 import com.dicoding.popcorn.core.data.remote.RemoteDataSource
 import com.dicoding.popcorn.core.data.remote.network.ApiResponse
@@ -14,22 +12,25 @@ import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.map
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class PopcornRepository(
+@Singleton
+class PopcornRepository @Inject constructor(
     private val remoteDataSource: RemoteDataSource,
     private val localDataSource: LocalDataSource,
     private val appExecutors: AppExecutors
 ): IPopcornRepository {
 
-    companion object {
-        @Volatile
-        private var instance: PopcornRepository? = null
-
-        fun getInstance(remoteData: RemoteDataSource, localData: LocalDataSource, appExecutors: AppExecutors): PopcornRepository =
-            instance ?: synchronized(this) {
-                instance ?: PopcornRepository(remoteData, localData, appExecutors)
-            }
-    }
+//    companion object {
+//        @Volatile
+//        private var instance: PopcornRepository? = null
+//
+//        fun getInstance(remoteData: RemoteDataSource, localData: LocalDataSource, appExecutors: AppExecutors): PopcornRepository =
+//            instance ?: synchronized(this) {
+//                instance ?: PopcornRepository(remoteData, localData, appExecutors)
+//            }
+//    }
 
     override fun getRemoteMovies(): Flow<Resource<List<Movie>>> = flow {
         when (val apiResponse = remoteDataSource.getMovies().first()) {

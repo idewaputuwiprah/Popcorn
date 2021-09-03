@@ -6,7 +6,9 @@ import android.os.Bundle
 import com.dicoding.popcorn.databinding.ActivityHomeBinding
 import com.dicoding.popcorn.ui.favorite.FavoriteActivity
 import com.jaeger.library.StatusBarUtil
+import dagger.hilt.android.AndroidEntryPoint
 
+@AndroidEntryPoint
 class HomeActivity : AppCompatActivity() {
     private lateinit var activityMainBinding: ActivityHomeBinding
 

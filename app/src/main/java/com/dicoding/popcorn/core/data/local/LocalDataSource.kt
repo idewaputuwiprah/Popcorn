@@ -1,19 +1,21 @@
 package com.dicoding.popcorn.core.data.local
 
-import androidx.lifecycle.LiveData
 import com.dicoding.popcorn.core.data.local.entity.MovieFavEntity
 import com.dicoding.popcorn.core.data.local.entity.TVShowFavEntity
 import com.dicoding.popcorn.core.data.local.room.PopcornDAO
 import kotlinx.coroutines.flow.Flow
+import javax.inject.Inject
+import javax.inject.Singleton
 
-class LocalDataSource private constructor(private val popcornDAO: PopcornDAO) {
+@Singleton
+class LocalDataSource @Inject constructor(private val popcornDAO: PopcornDAO) {
 
-    companion object {
-        private var INSTANCE: LocalDataSource? = null
-
-        fun getInstance(popcornDAO: PopcornDAO): LocalDataSource =
-            INSTANCE ?: LocalDataSource(popcornDAO)
-    }
+//    companion object {
+//        private var INSTANCE: LocalDataSource? = null
+//
+//        fun getInstance(popcornDAO: PopcornDAO): LocalDataSource =
+//            INSTANCE ?: LocalDataSource(popcornDAO)
+//    }
 
     fun getMovieFav(): Flow<List<MovieFavEntity>> = popcornDAO.getMovieFav()
 
