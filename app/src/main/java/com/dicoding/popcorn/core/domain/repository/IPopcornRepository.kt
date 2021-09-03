@@ -15,17 +15,17 @@ interface IPopcornRepository {
 
     fun getDetailTVShows(id: Int): Flow<Resource<Detail>>
 
-    fun getMoviesFav(): LiveData<List<Movie>>
+    fun getMoviesFav(): Flow<List<Movie>>
 
-    fun getMovieFav(movieId: String): LiveData<Movie>
+    fun getMovieFav(movieId: String): Flow<Movie?>
 
-    fun getTVShowsFav(): LiveData<List<Movie>>
+    fun getTVShowsFav(): Flow<List<Movie>>
 
-    fun getTVShowFav(tvId:String): LiveData<Movie>
+    fun getTVShowFav(tvId:String): Flow<Movie?>
 
-    fun insertMovieFav(movieDetail: Detail)
+    suspend fun insertMovieFav(movieDetail: Detail)
 
-    fun insertTVShowFav(tvShowDetail: Detail)
+    suspend fun insertTVShowFav(tvShowDetail: Detail)
 
     fun deleteMovieFav(movieDetail: Detail)
 

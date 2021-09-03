@@ -1,20 +1,14 @@
 package com.dicoding.popcorn.core.data.remote
 
 import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
 import com.dicoding.popcorn.BuildConfig
 import com.dicoding.popcorn.core.data.remote.network.ApiResponse
 import com.dicoding.popcorn.core.data.remote.network.ApiService
 import com.dicoding.popcorn.core.data.remote.response.*
-import com.dicoding.popcorn.utils.EspressoIdlingResource
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.flowOn
-import retrofit2.Call
-import retrofit2.Callback
-import retrofit2.Response
 
 class RemoteDataSource(private val apiService: ApiService) {
     companion object {
@@ -100,27 +94,4 @@ class RemoteDataSource(private val apiService: ApiService) {
             Log.e("Detail TV Show API", e.toString())
         }
     }.flowOn(Dispatchers.IO)
-
-//    {
-//        val resultData = MutableLiveData<ApiResponse<DetailTVShowsResponse>>()
-//        EspressoIdlingResource.increment()
-//        val client = apiService.getTVShowsDetail(
-//            id = id,
-//            apiKey = BuildConfig.API_KEY,
-//            language = "en-US"
-//        )
-//        EspressoIdlingResource.decrement()
-//        client.enqueue(object : Callback<DetailTVShowsResponse>{
-//            override fun onResponse(call: Call<DetailTVShowsResponse>, response: Response<DetailTVShowsResponse>) {
-//                val data = response.body()
-//                resultData.value = if (data != null) ApiResponse.SUCCESS(data) else ApiResponse.Empty
-//            }
-//
-//            override fun onFailure(call: Call<DetailTVShowsResponse>, t: Throwable) {
-//                resultData.value = ApiResponse.ERROR(t.message.toString())
-//                Log.d("Detail TV Show API", t.message.toString())
-//            }
-//        })
-//        return resultData
-//    }
 }

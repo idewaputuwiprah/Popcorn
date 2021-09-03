@@ -4,6 +4,7 @@ import androidx.lifecycle.LiveData
 import com.dicoding.popcorn.core.data.local.entity.MovieFavEntity
 import com.dicoding.popcorn.core.data.local.entity.TVShowFavEntity
 import com.dicoding.popcorn.core.data.local.room.PopcornDAO
+import kotlinx.coroutines.flow.Flow
 
 class LocalDataSource private constructor(private val popcornDAO: PopcornDAO) {
 
@@ -14,17 +15,17 @@ class LocalDataSource private constructor(private val popcornDAO: PopcornDAO) {
             INSTANCE ?: LocalDataSource(popcornDAO)
     }
 
-    fun getMovieFav(): LiveData<List<MovieFavEntity>> = popcornDAO.getMovieFav()
+    fun getMovieFav(): Flow<List<MovieFavEntity>> = popcornDAO.getMovieFav()
 
-    fun getTVShowFav(): LiveData<List<TVShowFavEntity>> = popcornDAO.getTVShowFav()
+    fun getTVShowFav(): Flow<List<TVShowFavEntity>> = popcornDAO.getTVShowFav()
 
-    fun insertMovieFav(movieFav: MovieFavEntity) = popcornDAO.insertMovieFav(movieFav)
+    suspend fun insertMovieFav(movieFav: MovieFavEntity) = popcornDAO.insertMovieFav(movieFav)
 
-    fun insertTVShowFav(tvShowFav: TVShowFavEntity) = popcornDAO.insertTVShowFav(tvShowFav)
+    suspend fun insertTVShowFav(tvShowFav: TVShowFavEntity) = popcornDAO.insertTVShowFav(tvShowFav)
 
-    fun getMovieFavById(movieId: String): LiveData<MovieFavEntity> = popcornDAO.getMovieFavById(movieId)
+    fun getMovieFavById(movieId: String): Flow<MovieFavEntity> = popcornDAO.getMovieFavById(movieId)
 
-    fun getTVShowFavById(tvId: String): LiveData<TVShowFavEntity> = popcornDAO.getTVShowFavById(tvId)
+    fun getTVShowFavById(tvId: String): Flow<TVShowFavEntity> = popcornDAO.getTVShowFavById(tvId)
 
     fun deleteMovie(movieFavEntity: MovieFavEntity) = popcornDAO.deleteMovieFav(movieFavEntity)
 

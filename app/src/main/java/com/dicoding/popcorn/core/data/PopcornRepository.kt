@@ -1,7 +1,6 @@
 package com.dicoding.popcorn.core.data
 
 import androidx.lifecycle.LiveData
-import androidx.lifecycle.MediatorLiveData
 import androidx.lifecycle.Transformations
 import com.dicoding.popcorn.core.data.local.LocalDataSource
 import com.dicoding.popcorn.core.data.remote.RemoteDataSource
@@ -14,6 +13,7 @@ import com.dicoding.popcorn.core.utils.DataMapper
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.map
 
 class PopcornRepository(
     private val remoteDataSource: RemoteDataSource,
@@ -84,56 +84,32 @@ class PopcornRepository(
             }
         }
     }
-//    {
-//        val result = MediatorLiveData<Resource<Detail>>()
-//        val apiResponse = remoteDataSource.getTVShowDetail(id)
-//        result.addSource(apiResponse) { response->
-//            when (response) {
-//                is ApiResponse.SUCCESS -> {
-//                    val detail = DataMapper.mapDetailTVShowResponseToDetailEntity(response.data)
-//                    result.value = Resource.Success(detail)
-//                }
-//                is ApiResponse.ERROR -> {
-//                    result.value = Resource.Error(response.errorMessage)
-//                }
-//                else -> Unit
-//            }
-//        }
-//        return result
-//    }
 
-    override fun getMoviesFav(): LiveData<List<Movie>> {
-        return Transformations.map(localDataSource.getMovieFav()) {
-            DataMapper.mapMovieFavEntitiesToMovie(it)
-        }
+    override fun getMoviesFav(): Flow<List<Movie>> {
+        return localDataSource.getMovieFav().map { DataMapper.mapMovieFavEntitiesToMovie(it) }
     }
 
-    override fun getMovieFav(movieId: String): LiveData<Movie> {
-        return Transformations.map(localDataSource.getMovieFavById(movieId)) {
-            DataMapper.mapMovieFavEntityToMovie(it)
-        }
+    override fun getMovieFav(movieId: String): Flow<Movie?> {
+        return localDataSource.getMovieFavById(movieId).map { DataMapper.mapMovieFavEntityToMovie(it) }
     }
 
-    override fun getTVShowsFav(): LiveData<List<Movie>> {
-        return Transformations.map(localDataSource.getTVShowFav()) {
-            DataMapper.mapTVShowFavEntitiesToMovie(it)
-        }
+    override fun getTVShowsFav(): Flow<List<Movie>> {
+        return localDataSource.getTVShowFav().map { DataMapper.mapTVShowFavEntitiesToMovie(it) }
     }
 
-    override fun getTVShowFav(tvId: String): LiveData<Movie> {
-        return Transformations.map(localDataSource.getTVShowFavById(tvId)){
-            DataMapper.mapTVShowFavEntityToMovie(it)
-        }
+    override fun getTVShowFav(tvId: String): Flow<Movie?> {
+        return localDataSource.getTVShowFavById(tvId).map { DataMapper.mapTVShowFavEntityToMovie(it) }
     }
 
-    override fun insertMovieFav(movieDetail: Detail) {
+    override suspend fun insertMovieFav(movieDetail: Detail) {
         val movieFav = DataMapper.mapDetailToMovieFavEntity(movieDetail)
-        appExecutors.diskIO().execute { localDataSource.insertMovieFav(movieFav) }
+        localDataSource.insertMovieFav(movieFav)
     }
 
-    override fun insertTVShowFav(tvShowDetail: Detail) {
+    override suspend fun insertTVShowFav(tvShowDetail: Detail) {
         val tvShowFav = DataMapper.mapDetailToTVShowFavEntity(tvShowDetail)
-        appExecutors.diskIO().execute { localDataSource.insertTVShowFav(tvShowFav) }
+//        appExecutors.diskIO().execute { localDataSource.insertTVShowFav(tvShowFav) }
+        localDataSource.insertTVShowFav(tvShowFav)
     }
 
     override fun deleteMovieFav(movieDetail: Detail) {

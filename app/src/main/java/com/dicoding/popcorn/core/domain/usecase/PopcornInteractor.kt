@@ -20,23 +20,23 @@ class PopcornInteractor(private val popcornRepository: IPopcornRepository): Popc
     override fun getDetailTVShows(id: Int): Flow<Resource<Detail>> =
         popcornRepository.getDetailTVShows(id)
 
-    override fun getMoviesFav(): LiveData<List<Movie>> =
+    override fun getMoviesFav(): Flow<List<Movie>> =
         popcornRepository.getMoviesFav()
 
-    override fun getMovieFav(movieId: String): LiveData<Movie> =
+    override fun getMovieFav(movieId: String): Flow<Movie?> =
         popcornRepository.getMovieFav(movieId)
 
-    override fun getTVShowsFav(): LiveData<List<Movie>> =
+    override fun getTVShowsFav(): Flow<List<Movie>> =
         popcornRepository.getTVShowsFav()
 
-    override fun getTVShowFav(tvId: String): LiveData<Movie> =
+    override fun getTVShowFav(tvId: String): Flow<Movie?> =
         popcornRepository.getTVShowFav(tvId)
 
-    override fun insertMovieFav(movieDetail: Detail) {
+    override suspend fun insertMovieFav(movieDetail: Detail) {
         popcornRepository.insertMovieFav(movieDetail)
     }
 
-    override fun insertTVShowFav(tvShowDetail: Detail) {
+    override suspend fun insertTVShowFav(tvShowDetail: Detail) {
         popcornRepository.insertTVShowFav(tvShowDetail)
     }
 
