@@ -1,6 +1,5 @@
 package com.idputuwiprah.core.domain.usecase
 
-import androidx.lifecycle.LiveData
 import com.idputuwiprah.core.data.Resource
 import com.idputuwiprah.core.domain.model.Detail
 import com.idputuwiprah.core.domain.model.Movie

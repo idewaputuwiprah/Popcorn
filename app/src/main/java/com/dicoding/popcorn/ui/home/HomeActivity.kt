@@ -4,7 +4,6 @@ import android.content.Intent
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import com.dicoding.popcorn.databinding.ActivityHomeBinding
-import com.dicoding.popcorn.ui.favorite.FavoriteActivity
 import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -25,7 +24,7 @@ class HomeActivity : AppCompatActivity() {
         activityMainBinding.tabs.setupWithViewPager(activityMainBinding.viewPager)
 
         activityMainBinding.fabFav.setOnClickListener {
-            val intent = Intent(this, FavoriteActivity::class.java)
+            val intent = Intent(this, Class.forName("com.idputuwiprah.favorite.FavoriteActivity"))
             startActivity(intent)
         }
     }

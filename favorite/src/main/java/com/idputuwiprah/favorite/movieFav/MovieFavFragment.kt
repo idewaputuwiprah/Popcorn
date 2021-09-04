@@ -1,5 +1,6 @@
-package com.dicoding.popcorn.ui.favorite.movieFav
+package com.idputuwiprah.favorite.movieFav
 
+import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import androidx.fragment.app.Fragment
@@ -10,16 +11,36 @@ import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
 import com.idputuwiprah.core.domain.model.Movie
 import com.dicoding.popcorn.databinding.FragmentMovieBinding
+import com.dicoding.popcorn.di.FavoriteModuleDependencies
 import com.dicoding.popcorn.ui.detail.DetailActivity
+import com.dicoding.popcorn.ui.detail.DetailActivity.Companion.MOVIE_TYPE
 import com.dicoding.popcorn.ui.home.ItemCallback
 import com.dicoding.popcorn.ui.movie.MovieAdapter
-import dagger.hilt.android.AndroidEntryPoint
+import com.idputuwiprah.favorite.DaggerFavoriteComponent
+import com.idputuwiprah.favorite.viewModel.ViewModelFactory
+import dagger.hilt.android.EntryPointAccessors
+import javax.inject.Inject
 
-@AndroidEntryPoint
 class MovieFavFragment : Fragment() {
     private lateinit var fragmentMovieBinding: FragmentMovieBinding
-    private val viewModel: MovieFavViewModel by viewModels()
+    @Inject
+    lateinit var factory: ViewModelFactory
+    private val viewModel: MovieFavViewModel by viewModels { factory }
     private lateinit var movieAdapter: MovieAdapter
+
+    override fun onAttach(context: Context) {
+        super.onAttach(context)
+        DaggerFavoriteComponent.builder()
+            .context(requireContext())
+            .appDependencies(
+                EntryPointAccessors.fromApplication(
+                    requireContext().applicationContext,
+                    FavoriteModuleDependencies::class.java
+                )
+            )
+            .build()
+            .inject(this)
+    }
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         fragmentMovieBinding = FragmentMovieBinding.inflate(inflater, container, false)
@@ -33,9 +54,9 @@ class MovieFavFragment : Fragment() {
 
             movieAdapter.setOnClickListener(object : ItemCallback {
                 override fun onClick(data: Movie) {
-                    val intent = Intent(context, DetailActivity::class.java)
+                    val intent = Intent(context, Class.forName("com.dicoding.popcorn.ui.detail.DetailActivity"))
                     intent.apply {
-                        putExtra(DetailActivity.ITEM_TYPE, DetailActivity.MOVIE_TYPE)
+                        putExtra(DetailActivity.ITEM_TYPE, MOVIE_TYPE)
                         putExtra(DetailActivity.ITEM_ID, data.movieId)
                     }
                     startActivity(intent)

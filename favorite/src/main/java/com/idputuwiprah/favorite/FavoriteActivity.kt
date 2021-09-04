@@ -1,13 +1,11 @@
-package com.dicoding.popcorn.ui.favorite
+package com.idputuwiprah.favorite
 
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
 import com.dicoding.popcorn.databinding.ActivityHomeBinding
 import com.jaeger.library.StatusBarUtil
-import dagger.hilt.android.AndroidEntryPoint
 
-@AndroidEntryPoint
 class FavoriteActivity : AppCompatActivity() {
     private lateinit var activityMainBinding: ActivityHomeBinding
 

@@ -1,15 +1,12 @@
-package com.dicoding.popcorn.ui.favorite.movieFav
+package com.idputuwiprah.favorite.movieFav
 
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.asLiveData
 import com.idputuwiprah.core.domain.model.Movie
 import com.idputuwiprah.core.domain.usecase.PopcornUseCase
-import dagger.hilt.android.lifecycle.HiltViewModel
-import javax.inject.Inject
 
-@HiltViewModel
-class MovieFavViewModel @Inject constructor(private val popcornUseCase: PopcornUseCase) : ViewModel() {
+class MovieFavViewModel(private val popcornUseCase: PopcornUseCase) : ViewModel() {
 
     fun getFavMovies(): LiveData<List<Movie>> = popcornUseCase.getMoviesFav().asLiveData()
 }

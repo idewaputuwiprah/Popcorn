@@ -29,7 +29,7 @@
                 android:value=".ui.home.HomeActivity" />
         </activity>
         <activity android:name=".ui.home.HomeActivity" />
-        <activity android:name=".ui.favorite.FavoriteActivity" />
+        <activity android:name="com.idputuwiprah.favorite.FavoriteActivity" />
     </application>
 
 </manifest>

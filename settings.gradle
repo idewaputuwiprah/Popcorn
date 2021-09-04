@@ -1,3 +1,4 @@
 include ':app'
 rootProject.name = "Popcorn"
 include ':core'
+include ':favorite'
