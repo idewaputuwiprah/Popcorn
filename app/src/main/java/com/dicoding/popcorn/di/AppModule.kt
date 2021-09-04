@@ -1,7 +1,7 @@
 package com.dicoding.popcorn.di
 
-import com.dicoding.popcorn.core.domain.usecase.PopcornInteractor
-import com.dicoding.popcorn.core.domain.usecase.PopcornUseCase
+import com.idputuwiprah.core.domain.usecase.PopcornInteractor
+import com.idputuwiprah.core.domain.usecase.PopcornUseCase
 import dagger.Binds
 import dagger.Module
 import dagger.hilt.InstallIn

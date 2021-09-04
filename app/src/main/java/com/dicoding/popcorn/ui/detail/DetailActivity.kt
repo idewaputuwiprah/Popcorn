@@ -13,8 +13,8 @@ import androidx.lifecycle.Observer
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.dicoding.popcorn.R
-import com.dicoding.popcorn.core.domain.model.Detail
-import com.dicoding.popcorn.core.data.Resource
+import com.idputuwiprah.core.domain.model.Detail
+import com.idputuwiprah.core.data.Resource
 import com.dicoding.popcorn.databinding.ActivityDetailBinding
 import com.dicoding.popcorn.databinding.ContentDetailBinding
 import com.jaeger.library.StatusBarUtil

@@ -6,7 +6,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.bumptech.glide.Glide
 import com.bumptech.glide.request.RequestOptions
 import com.dicoding.popcorn.R
-import com.dicoding.popcorn.core.domain.model.Movie
+import com.idputuwiprah.core.domain.model.Movie
 import com.dicoding.popcorn.databinding.ItemsMovieBinding
 import com.dicoding.popcorn.ui.home.ItemCallback
 import java.lang.StringBuilder

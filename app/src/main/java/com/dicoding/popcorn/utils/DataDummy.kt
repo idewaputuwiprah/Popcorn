@@ -1,7 +1,7 @@
 package com.dicoding.popcorn.utils
 
-import com.dicoding.popcorn.core.domain.model.Detail
-import com.dicoding.popcorn.core.domain.model.Movie
+import com.idputuwiprah.core.domain.model.Detail
+import com.idputuwiprah.core.domain.model.Movie
 
 object DataDummy {
 
