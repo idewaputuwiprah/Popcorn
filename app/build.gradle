@@ -47,5 +47,6 @@ android {
 dependencies {
     implementation project(":core")
     implementation "com.jaeger.statusbarutil:library:$statusBarUtilVersion"
+    //noinspection DifferentStdlibGradleVersion
     implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
 }

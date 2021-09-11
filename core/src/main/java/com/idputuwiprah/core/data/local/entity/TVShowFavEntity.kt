@@ -7,7 +7,7 @@ import androidx.room.PrimaryKey
 
 @Entity(tableName = "tvShowFav")
 data class TVShowFavEntity(
-    @PrimaryKey()
+    @PrimaryKey
     @NonNull
     @ColumnInfo(name = "tvShowId")
     var tvShowId: String,

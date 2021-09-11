@@ -3,7 +3,6 @@ package com.dicoding.popcorn.ui.home
 import androidx.recyclerview.widget.RecyclerView
 import androidx.test.core.app.ActivityScenario
 import androidx.test.espresso.Espresso.onView
-import androidx.test.espresso.IdlingRegistry
 import androidx.test.espresso.action.ViewActions
 import androidx.test.espresso.action.ViewActions.click
 import androidx.test.espresso.assertion.ViewAssertions.matches
@@ -11,7 +10,6 @@ import androidx.test.espresso.contrib.RecyclerViewActions
 import androidx.test.espresso.matcher.ViewMatchers.*
 import com.dicoding.popcorn.R
 import com.dicoding.popcorn.utils.DataDummy
-import com.dicoding.popcorn.utils.EspressoIdlingResource
 import org.junit.After
 import org.junit.Before
 import org.junit.Test
@@ -26,12 +24,12 @@ class HomeActivityTest {
     @Before
     fun setup() {
         ActivityScenario.launch(HomeActivity::class.java)
-        IdlingRegistry.getInstance().register(EspressoIdlingResource.espressoTestIdlingResource)
+//        IdlingRegistry.getInstance().register(EspressoIdlingResource.espressoTestIdlingResource)
     }
 
     @After
     fun tearDown() {
-        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.espressoTestIdlingResource)
+//        IdlingRegistry.getInstance().unregister(EspressoIdlingResource.espressoTestIdlingResource)
     }
 
     @Test
