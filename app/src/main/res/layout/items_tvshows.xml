@@ -18,7 +18,7 @@
 
         <ImageView
             android:id="@+id/img_poster"
-            android:layout_width="120dp"
+            android:layout_width="100dp"
             android:layout_height="120dp"
             android:layout_alignParentStart="true"
             android:layout_alignParentTop="true"
@@ -26,14 +26,13 @@
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toTopOf="parent"
-            tools:ignore="ContentDescription"
-            android:scaleType="fitXY"/>
+            tools:ignore="ContentDescription" />
 
         <TextView
             android:id="@+id/tv_item_title"
             android:layout_width="0dp"
             android:layout_height="wrap_content"
-            android:layout_marginStart="16dp"
+            android:layout_marginStart="10dp"
             android:layout_marginTop="16dp"
             android:layout_marginEnd="16dp"
             android:ellipsize="end"
@@ -58,33 +57,22 @@
             app:layout_constraintTop_toBottomOf="@+id/tv_item_title"
             tools:text="@string/tags"
             android:layout_marginTop="2dp"
-            android:textColor="@color/pink"/>
+            android:textColor="@color/pink"
+            android:textStyle="bold"/>
 
-        <LinearLayout
-            android:id="@+id/rl_rating_duration"
+        <TextView
+            android:id="@+id/tv_rating"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            tools:text="@string/rating"
+            android:textColor="@android:color/white"
+            android:textSize="12sp"
+            android:layout_gravity="center_vertical"
+            android:fontFamily="@font/nuggetmed"
+            app:drawableStartCompat="@drawable/ic_imdb_list"
+            android:drawablePadding="5dp"
             app:layout_constraintBottom_toBottomOf="parent"
             app:layout_constraintStart_toStartOf="@+id/tv_item_years"
-            android:orientation="horizontal"
-            android:layout_marginBottom="16dp">
-
-            <ImageView
-                android:id="@+id/img_rating"
-                android:layout_width="34dp"
-                android:layout_height="15dp"
-                android:src="@drawable/imdb" />
-
-            <TextView
-                android:id="@+id/tv_rating"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                tools:text="@string/rating"
-                android:textColor="@android:color/white"
-                android:textSize="12sp"
-                android:layout_gravity="center_vertical"
-                android:fontFamily="@font/nuggetmed"
-                android:layout_marginStart="5dp"/>
-        </LinearLayout>
+            android:layout_marginBottom="16dp"/>
     </androidx.constraintlayout.widget.ConstraintLayout>
 </androidx.cardview.widget.CardView>
