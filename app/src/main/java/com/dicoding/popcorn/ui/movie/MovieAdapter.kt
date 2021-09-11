@@ -3,13 +3,10 @@ package com.dicoding.popcorn.ui.movie
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.dicoding.popcorn.R
-import com.idputuwiprah.core.domain.model.Movie
 import com.dicoding.popcorn.databinding.ItemsMovieBinding
 import com.dicoding.popcorn.ui.home.ItemCallback
-import java.lang.StringBuilder
+import com.dicoding.popcorn.utils.loadImage
+import com.idputuwiprah.core.domain.model.Movie
 
 class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
     private var listMovies = ArrayList<Movie>()
@@ -32,11 +29,7 @@ class MovieAdapter : RecyclerView.Adapter<MovieAdapter.MovieViewHolder>() {
                 tvItemTitle.text = movie.title
                 tvItemYears.text = movie.year
                 tvRating.text = StringBuilder("${movie.rating}/10")
-
-                Glide.with(itemView.context)
-                    .load(movie.path)
-                    .apply(RequestOptions.placeholderOf(R.drawable.ic_refresh).error(R.drawable.ic_error))
-                    .into(imgPoster)
+                imgPoster.loadImage(movie.path)
             }
         }
     }

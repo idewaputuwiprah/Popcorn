@@ -9,15 +9,4 @@ import com.idputuwiprah.core.data.local.entity.TVShowFavEntity
 abstract class PopcornRoomDatabase : RoomDatabase() {
 
     abstract fun popcornDao(): PopcornDAO
-
-//    companion object {
-//        @Volatile
-//        private var instance: PopcornRoomDatabase? = null
-//
-//        @JvmStatic
-//        fun getDatabase(context: Context): PopcornRoomDatabase =
-//            instance ?: synchronized(this) {
-//                instance ?: Room.databaseBuilder(context.applicationContext, PopcornRoomDatabase::class.java, "popcorn_database").build()
-//            }
-//    }
 }

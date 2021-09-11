@@ -10,24 +10,17 @@ import androidx.core.content.ContextCompat
 import androidx.lifecycle.LifecycleOwner
 import androidx.lifecycle.LiveData
 import androidx.lifecycle.Observer
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
 import com.dicoding.popcorn.R
-import com.idputuwiprah.core.domain.model.Detail
-import com.idputuwiprah.core.data.Resource
 import com.dicoding.popcorn.databinding.ActivityDetailBinding
 import com.dicoding.popcorn.databinding.ContentDetailBinding
+import com.dicoding.popcorn.utils.loadImage
+import com.idputuwiprah.core.data.Resource
+import com.idputuwiprah.core.domain.model.Detail
 import com.jaeger.library.StatusBarUtil
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class DetailActivity : AppCompatActivity() {
-    companion object {
-        const val ITEM_TYPE = "type"
-        const val ITEM_ID = "item_id"
-        const val MOVIE_TYPE = "movie"
-        const val TV_SHOW_TYPE = "tv_show"
-    }
     private lateinit var activityDetailBinding: ActivityDetailBinding
     private lateinit var contentDetailBinding: ContentDetailBinding
     private val viewModel: DetailViewModel by viewModels()
@@ -107,14 +100,7 @@ class DetailActivity : AppCompatActivity() {
             tvDirector.text = detail.director
             tvWriters.text = detail.writers
             tvStars.text = detail.stars
-
-            Glide.with(this@DetailActivity)
-                .load(detail.backdrop)
-                .apply(
-                    RequestOptions.placeholderOf(R.drawable.ic_refresh)
-                        .error(R.drawable.ic_error)
-                )
-                .into(imgPoster)
+            imgPoster.loadImage(detail.backdrop)
             progressBar.visibility = View.GONE
         }
     }
@@ -179,5 +165,12 @@ class DetailActivity : AppCompatActivity() {
             }
         }
         return super.onOptionsItemSelected(item)
+    }
+
+    companion object {
+        const val ITEM_TYPE = "type"
+        const val ITEM_ID = "item_id"
+        const val MOVIE_TYPE = "movie"
+        const val TV_SHOW_TYPE = "tv_show"
     }
 }

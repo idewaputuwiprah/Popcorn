@@ -15,7 +15,8 @@
         android:supportsRtl="true"
         android:theme="@style/Theme.Popcorn.NoActionBar">
         <activity android:name=".ui.home.SplashScreenActivity"
-            android:theme="@style/Theme.Popcorn.SplashScreen">
+            android:theme="@style/Theme.Popcorn.SplashScreen"
+            android:exported="true">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 

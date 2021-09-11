@@ -3,13 +3,10 @@ package com.dicoding.popcorn.ui.tvshow
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.RecyclerView
-import com.bumptech.glide.Glide
-import com.bumptech.glide.request.RequestOptions
-import com.dicoding.popcorn.R
-import com.idputuwiprah.core.domain.model.Movie
 import com.dicoding.popcorn.databinding.ItemsTvshowsBinding
 import com.dicoding.popcorn.ui.home.ItemCallback
-import java.lang.StringBuilder
+import com.dicoding.popcorn.utils.loadImage
+import com.idputuwiprah.core.domain.model.Movie
 
 class TVShowAdapter : RecyclerView.Adapter<TVShowAdapter.TVShowsViewHolder>() {
     private val listTVShows = ArrayList<Movie>()
@@ -32,11 +29,7 @@ class TVShowAdapter : RecyclerView.Adapter<TVShowAdapter.TVShowsViewHolder>() {
                 tvItemTitle.text = show.title
                 tvItemYears.text = show.year
                 tvRating.text = StringBuilder("${show.rating}/10")
-
-                Glide.with(itemView.context)
-                        .load(show.path)
-                        .apply(RequestOptions.placeholderOf(R.drawable.ic_refresh).error(R.drawable.ic_error))
-                        .into(imgPoster)
+                imgPoster.loadImage(show.path)
             }
         }
     }

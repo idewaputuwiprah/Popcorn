@@ -8,9 +8,6 @@ import com.dicoding.popcorn.R
 import com.jaeger.library.StatusBarUtil
 
 class SplashScreenActivity : AppCompatActivity() {
-    companion object {
-        private const val TIME_OUT: Long = 3000
-    }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -22,5 +19,9 @@ class SplashScreenActivity : AppCompatActivity() {
             startActivity(Intent(this, HomeActivity::class.java))
             finish()
         }, TIME_OUT)
+    }
+
+    companion object {
+        private const val TIME_OUT: Long = 3000
     }
 }
