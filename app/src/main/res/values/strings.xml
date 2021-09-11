@@ -6,14 +6,10 @@
     <string name="movies_fav">Movies Fav</string>
     <string name="tv_shows_fav">TV Shows Fav</string>
 
-    <string name="fragment_movie">Fragment Movie</string>
-    <string name="fragment_tvshow">Fragment TV Show</string>
     <string name="title">Title</string>
     <string name="tags">tags</string>
     <string name="rating">Rating</string>
     <string name="title_activity_detail">DetailActivity</string>
-    <string name="next">Next</string>
-    <string name="previous">Previous</string>
 
     <string name="year">year</string>
     <string name="duration">duration</string>
