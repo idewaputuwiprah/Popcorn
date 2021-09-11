@@ -1,6 +1,9 @@
 <?xml version="1.0" encoding="utf-8"?>
-<layer-list xmlns:android="http://schemas.android.com/apk/res/android">
+<layer-list xmlns:tools="http://schemas.android.com/tools"
+    xmlns:android="http://schemas.android.com/apk/res/android">
     <item android:drawable="@drawable/imdb"
         android:width="34dp"
-        android:height="15dp" />
+        android:height="15dp"
+        tools:targetApi="m"
+        tools:ignore="UnusedAttribute" />
 </layer-list>

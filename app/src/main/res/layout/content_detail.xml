@@ -17,7 +17,8 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         tools:src="@drawable/titan"
-        app:layout_constraintCircleRadius="100dp"/>
+        app:layout_constraintCircleRadius="100dp"
+        android:contentDescription="@string/item_image" />
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:id="@+id/rl_content"
@@ -79,7 +80,8 @@
                 android:layout_height="20dp"
                 android:src="@drawable/imdb"
                 app:layout_constraintTop_toTopOf="parent"
-                app:layout_constraintStart_toStartOf="parent"/>
+                app:layout_constraintStart_toStartOf="parent"
+                android:contentDescription="@string/imdb" />
 
             <TextView
                 android:id="@+id/tv_rating"
@@ -100,7 +102,8 @@
                 android:src="@drawable/ic_duration"
                 app:layout_constraintTop_toBottomOf="@+id/img_rating"
                 app:layout_constraintStart_toStartOf="@+id/img_rating"
-                android:layout_marginTop="10dp"/>
+                android:layout_marginTop="10dp"
+                android:contentDescription="@string/duration" />
 
             <TextView
                 android:id="@+id/tv_duration"

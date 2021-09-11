@@ -38,5 +38,6 @@
         android:layout_margin="16dp"
         android:src="@drawable/ic_favorite"
         app:layout_anchor="@id/frame"
-        app:layout_anchorGravity="bottom|end"/>
+        app:layout_anchorGravity="bottom|end"
+        android:contentDescription="@string/btn_favorite" />
 </androidx.coordinatorlayout.widget.CoordinatorLayout>
