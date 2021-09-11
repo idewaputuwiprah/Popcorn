@@ -17,6 +17,7 @@
     <style name="Theme.Popcorn.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/background</item>
     </style>
 
     <style name="TitleBarTextAppearance" parent="android:TextAppearance">
@@ -36,6 +37,13 @@
     <style name="Theme.Popcorn.NoActionBar.NoActionBar">
         <item name="windowActionBar">false</item>
         <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@color/background_lighter</item>
+    </style>
+
+    <style name="Theme.Popcorn.SplashScreen">
+        <item name="windowActionBar">false</item>
+        <item name="windowNoTitle">true</item>
+        <item name="android:windowBackground">@drawable/background</item>
     </style>
 
     <style name="Theme.Popcorn.NoActionBar.AppBarOverlay" parent="ThemeOverlay.AppCompat.Dark.ActionBar" />
