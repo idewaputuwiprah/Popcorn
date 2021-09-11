@@ -4,7 +4,6 @@ import com.idputuwiprah.core.data.remote.response.DetailMovieResponse
 import com.idputuwiprah.core.data.remote.response.DetailTVShowsResponse
 import com.idputuwiprah.core.data.remote.response.MoviesResponse
 import com.idputuwiprah.core.data.remote.response.TVShowsResponse
-import retrofit2.Call
 import retrofit2.http.GET
 import retrofit2.http.Path
 import retrofit2.http.Query

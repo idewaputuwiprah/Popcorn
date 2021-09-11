@@ -1,9 +1,8 @@
 package com.idputuwiprah.core.domain.repository
 
-import androidx.lifecycle.LiveData
+import com.idputuwiprah.core.data.Resource
 import com.idputuwiprah.core.domain.model.Detail
 import com.idputuwiprah.core.domain.model.Movie
-import com.idputuwiprah.core.data.Resource
 import kotlinx.coroutines.flow.Flow
 
 interface IPopcornRepository {

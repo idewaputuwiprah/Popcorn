@@ -1,3 +1,7 @@
+@file:Suppress("RemoveExplicitTypeArguments", "RemoveExplicitTypeArguments",
+    "RemoveExplicitTypeArguments", "RemoveExplicitTypeArguments", "RemoveExplicitTypeArguments"
+)
+
 package com.idputuwiprah.core.data
 
 import com.idputuwiprah.core.data.local.LocalDataSource

@@ -1,6 +1,5 @@
 package com.idputuwiprah.core.data.local.room
 
-import androidx.lifecycle.LiveData
 import androidx.room.*
 import com.idputuwiprah.core.data.local.entity.MovieFavEntity
 import com.idputuwiprah.core.data.local.entity.TVShowFavEntity
