@@ -54,6 +54,10 @@ dependencies {
     androidTestImplementation "androidx.room:room-testing:$roomVersion"
     implementation "androidx.room:room-ktx:$roomVersion"
 
+    //database encryption
+    implementation "net.zetetic:android-database-sqlcipher:4.4.0"
+    implementation "androidx.sqlite:sqlite-ktx:2.1.0"
+
     //lifecycle scope
     implementation "androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1"
     implementation "androidx.lifecycle:lifecycle-runtime-ktx:2.3.1"
