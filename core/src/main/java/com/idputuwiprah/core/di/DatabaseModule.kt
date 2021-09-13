@@ -25,7 +25,7 @@ class DatabaseModule {
         return Room.databaseBuilder(
             context,
             PopcornRoomDatabase::class.java,
-            "popcorn_database"
+            "PopcornDatabase.db"
         ).fallbackToDestructiveMigration()
             .openHelperFactory(factory)
             .build()

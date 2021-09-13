@@ -3,6 +3,7 @@ package com.idputuwiprah.favorite
 import androidx.appcompat.app.AppCompatActivity
 import android.os.Bundle
 import android.view.View
+import androidx.annotation.Keep
 import com.dicoding.popcorn.databinding.ActivityHomeBinding
 import com.google.android.material.tabs.TabLayoutMediator
 import com.jaeger.library.StatusBarUtil

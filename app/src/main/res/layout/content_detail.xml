@@ -35,7 +35,6 @@
             android:textColor="@android:color/white"
             android:textSize="25sp"
             android:textStyle="bold"
-            android:fontFamily="@font/nuggetmed"
             android:ellipsize="marquee"
             app:layout_constraintTop_toTopOf="parent"
             app:layout_constraintStart_toStartOf="parent"

@@ -39,7 +39,6 @@
             android:ellipsize="end"
             android:maxLines="2"
             android:gravity="start"
-            android:fontFamily="@font/nuggetmed"
             android:textSize="16sp"
             android:textStyle="bold"
             android:textColor="@android:color/white"
