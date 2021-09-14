@@ -1,4 +1,4 @@
-package com.dicoding.popcorn.utils
+package com.idputuwiprah.core.utils
 
 import com.idputuwiprah.core.domain.model.Detail
 import com.idputuwiprah.core.domain.model.Movie
