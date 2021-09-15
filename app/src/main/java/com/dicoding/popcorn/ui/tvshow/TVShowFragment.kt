@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.idputuwiprah.core.data.Resource
 import com.idputuwiprah.core.domain.model.Movie
 import com.dicoding.popcorn.databinding.FragmentTVShowBinding
@@ -20,6 +21,8 @@ class TVShowFragment : Fragment() {
     private lateinit var fragmentTVShowBinding: FragmentTVShowBinding
     private lateinit var tvShowAdapter: TVShowAdapter
     private val viewModel: TVShowViewModel by viewModels()
+    private var page = 1
+    private var currentList = ArrayList<Movie>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         fragmentTVShowBinding = FragmentTVShowBinding.inflate(inflater, container, false)
@@ -41,24 +44,40 @@ class TVShowFragment : Fragment() {
             }
         })
 
+        viewModel.getTVShows(page)
         subscribeToObserver()
 
-        fragmentTVShowBinding.progressBar.visibility = View.VISIBLE
+        showProgressBar()
 
         with(fragmentTVShowBinding.rvTvshows) {
             layoutManager = LinearLayoutManager(context)
             setHasFixedSize(true)
             this.adapter = tvShowAdapter
+            addOnScrollListener(object : RecyclerView.OnScrollListener(){
+                override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                    if (!recyclerView.canScrollVertically(1)) {
+                        page += 1
+                        showProgressBar()
+                        viewModel.getTVShows(page)
+                    }
+                }
+            })
         }
     }
 
+    private fun showProgressBar() {
+        fragmentTVShowBinding.progressBar.visibility = View.VISIBLE
+    }
+
     private fun subscribeToObserver() {
-        viewModel.getRemoteTVShows().observe(requireActivity(), { tvShows->
+        viewModel.tvShows.observe(requireActivity(), { tvShows->
             if (tvShows != null) {
                 when (tvShows) {
                     is Resource.Success -> {
                         tvShows.data?.let {
-                            tvShowAdapter.listTVShows = it
+                            if (currentList.hashCode() != it.hashCode())
+                                currentList.addAll(it)
+                            tvShowAdapter.setShows(currentList)
                         }
                         fragmentTVShowBinding.apply {
                             tvTvshowsNull.visibility = View.GONE

@@ -8,6 +8,7 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.fragment.app.viewModels
 import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import com.idputuwiprah.core.domain.model.Movie
 import com.idputuwiprah.core.data.Resource
 import com.dicoding.popcorn.databinding.FragmentMovieBinding
@@ -17,9 +18,11 @@ import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class MovieFragment : Fragment() {
+    private var page = 1
     private lateinit var fragmentMovieBinding: FragmentMovieBinding
     private val viewModel: MovieViewModel by viewModels()
     private lateinit var movieAdapter: MovieAdapter
+    private val currentList = ArrayList<Movie>()
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View {
         fragmentMovieBinding = FragmentMovieBinding.inflate(inflater, container, false)
@@ -42,16 +45,30 @@ class MovieFragment : Fragment() {
                 }
             })
 
-            fragmentMovieBinding.progressBar.visibility = View.VISIBLE
+            showProgressBar()
 
+            viewModel.getMovies(page)
             subscribeToObserver()
 
             with(fragmentMovieBinding.rvMovies) {
                 layoutManager = LinearLayoutManager(context)
                 setHasFixedSize(true)
                 this.adapter = movieAdapter
+                addOnScrollListener(object : RecyclerView.OnScrollListener(){
+                    override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
+                        if (!recyclerView.canScrollVertically(1)) {
+                            page += 1
+                            showProgressBar()
+                            viewModel.getMovies(page)
+                        }
+                    }
+                })
             }
         }
+    }
+
+    fun showProgressBar() {
+        fragmentMovieBinding.progressBar.visibility = View.VISIBLE
     }
 
     private fun subscribeToObserver() {
@@ -60,7 +77,9 @@ class MovieFragment : Fragment() {
                 when (movies) {
                     is Resource.Success -> {
                         movies.data?.let {
-                            movieAdapter.listMovies = it
+                            if (currentList.hashCode() != it.hashCode())
+                                currentList.addAll(it)
+                            movieAdapter.setMovie(currentList)
                         }
                         fragmentMovieBinding.apply {
                             tvMoviesNull.visibility = View.GONE

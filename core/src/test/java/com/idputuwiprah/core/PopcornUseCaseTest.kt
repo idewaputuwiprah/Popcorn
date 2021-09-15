@@ -41,6 +41,7 @@ class PopcornUseCaseTest {
 
     private val testDispatcher = TestCoroutineDispatcher()
 
+    private val page = 1
     private val dummyRemoteMovieList = DataDummy.generateDummyRemoteMovie()
     private val dummyRemoteTvShowList = DataDummy.generateDummyRemoteTVShow()
     private val dummyMovieDetail = DataDummy.generateDummyMovieDetail()
@@ -57,8 +58,8 @@ class PopcornUseCaseTest {
         val dummyMovieDetailResponse: Flow<Resource<Detail>> = flow { emit(Resource.Success(DataDummy.generateDummyMovieDetail())) }
         val dummyTVShowDetailResponse: Flow<Resource<Detail>> = flow { emit(Resource.Success(DataDummy.generateDummyTVShowDetail())) }
         popcornUseCase = PopcornInteractor(popcornRepository)
-        `when`(popcornRepository.getRemoteMovies()).thenReturn(dummyMovieResponse)
-        `when`(popcornRepository.getRemoteTVShows()).thenReturn(dummyTVShowResponse)
+        `when`(popcornRepository.getRemoteMovies(page)).thenReturn(dummyMovieResponse)
+        `when`(popcornRepository.getRemoteTVShows(page)).thenReturn(dummyTVShowResponse)
         `when`(popcornRepository.getDetailMovie(dummyMovieDetail.movieId.toInt())).thenReturn(dummyMovieDetailResponse)
         `when`(popcornRepository.getDetailTVShows(dummyTVShowDetail.movieId.toInt())).thenReturn(dummyTVShowDetailResponse)
     }
@@ -73,7 +74,7 @@ class PopcornUseCaseTest {
     fun `get data from remote movie api`() = runBlocking {
         val latch = CountDownLatch(1)
         val job = launch(Dispatchers.IO) {
-            popcornUseCase.getRemoteMovies().collect { response->
+            popcornUseCase.getRemoteMovies(page).collect { response->
                 response.data?.forEachIndexed { index, movies ->
                     assertThat(movies, equalTo(dummyRemoteMovieList[index]))
                 }
@@ -83,7 +84,7 @@ class PopcornUseCaseTest {
 
         latch.await()
         job.cancel()
-        verify(popcornRepository).getRemoteMovies()
+        verify(popcornRepository).getRemoteMovies(page)
         verifyNoMoreInteractions(popcornRepository)
     }
 
@@ -91,7 +92,7 @@ class PopcornUseCaseTest {
     fun `get data from remote tv show api`() = runBlocking {
         val latch = CountDownLatch(1)
         val job = launch(Dispatchers.IO) {
-            popcornUseCase.getRemoteTVShows().collect { response->
+            popcornUseCase.getRemoteTVShows(page).collect { response->
                 response.data?.forEachIndexed { index, tvShows ->
                     assertThat(tvShows, equalTo(dummyRemoteTvShowList[index]))
                 }
@@ -101,7 +102,7 @@ class PopcornUseCaseTest {
 
         latch.await()
         job.cancel()
-        verify(popcornRepository).getRemoteTVShows()
+        verify(popcornRepository).getRemoteTVShows(page)
         verifyNoMoreInteractions(popcornRepository)
     }
 

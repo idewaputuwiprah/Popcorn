@@ -18,7 +18,7 @@ import javax.inject.Singleton
 @Singleton
 class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
 
-    fun getMovies(): Flow<ApiResponse<List<ResultsItem>>> {
+    fun getMovies(page: Int): Flow<ApiResponse<List<ResultsItem>>> {
         return flow {
             try {
                 val response = apiService.getMovieList(
@@ -27,7 +27,7 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
                     sortBy = "popularity.desc",
                     includeAdult = false,
                     includeVideo = false,
-                    page = 1
+                    page = page
                 )
                 val dataArray = response.results
                 if (dataArray.isNotEmpty()) {
@@ -56,13 +56,13 @@ class RemoteDataSource @Inject constructor(private val apiService: ApiService) {
         }
     }.flowOn(Dispatchers.IO)
 
-    fun getTVShows(): Flow<ApiResponse<List<ResultsTVItem>>> = flow {
+    fun getTVShows(page: Int): Flow<ApiResponse<List<ResultsTVItem>>> = flow {
         try {
             val response = apiService.getTVShowList(
                 apiKey = BuildConfig.API_KEY,
                 language = "en-US",
                 sortBy = "popularity.desc",
-                page = 1,
+                page = page,
                 timezone = "America/New_York",
                 includeNullAirDates = false
             )

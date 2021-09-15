@@ -9,14 +9,14 @@ import javax.inject.Inject
 
 class PopcornInteractor @Inject constructor(private val popcornRepository: IPopcornRepository):
     PopcornUseCase {
-    override fun getRemoteMovies(): Flow<Resource<List<Movie>>> =
-        popcornRepository.getRemoteMovies()
+    override suspend fun getRemoteMovies(page: Int): Flow<Resource<List<Movie>>> =
+        popcornRepository.getRemoteMovies(page)
 
     override fun getDetailMovie(id: Int): Flow<Resource<Detail>> =
         popcornRepository.getDetailMovie(id)
 
-    override fun getRemoteTVShows(): Flow<Resource<List<Movie>>> =
-        popcornRepository.getRemoteTVShows()
+    override suspend fun getRemoteTVShows(page: Int): Flow<Resource<List<Movie>>> =
+        popcornRepository.getRemoteTVShows(page)
 
     override fun getDetailTVShows(id: Int): Flow<Resource<Detail>> =
         popcornRepository.getDetailTVShows(id)

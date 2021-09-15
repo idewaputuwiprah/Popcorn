@@ -26,8 +26,8 @@ class PopcornRepository @Inject constructor(
     private val appExecutors: AppExecutors
 ): IPopcornRepository {
 
-    override fun getRemoteMovies(): Flow<Resource<List<Movie>>> = flow {
-        when (val apiResponse = remoteDataSource.getMovies().first()) {
+    override fun getRemoteMovies(page: Int): Flow<Resource<List<Movie>>> = flow {
+        when (val apiResponse = remoteDataSource.getMovies(page).first()) {
             is ApiResponse.SUCCESS -> {
                 val movieList = DataMapper.mapMovieResponseToMovies(apiResponse.data)
                 emit(Resource.Success(movieList))
@@ -53,8 +53,8 @@ class PopcornRepository @Inject constructor(
         }
     }
 
-    override fun getRemoteTVShows(): Flow<Resource<List<Movie>>> = flow {
-        when (val apiResponse = remoteDataSource.getTVShows().first()) {
+    override fun getRemoteTVShows(page: Int): Flow<Resource<List<Movie>>> = flow {
+        when (val apiResponse = remoteDataSource.getTVShows(page).first()) {
             is ApiResponse.SUCCESS -> {
                 val tvShowList = DataMapper.mapTVShowResponseToMovies(apiResponse.data)
                 emit(Resource.Success(tvShowList))

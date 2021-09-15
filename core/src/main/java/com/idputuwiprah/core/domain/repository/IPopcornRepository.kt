@@ -6,11 +6,11 @@ import com.idputuwiprah.core.domain.model.Movie
 import kotlinx.coroutines.flow.Flow
 
 interface IPopcornRepository {
-    fun getRemoteMovies(): Flow<Resource<List<Movie>>>
+    fun getRemoteMovies(page: Int): Flow<Resource<List<Movie>>>
 
     fun getDetailMovie(id: Int): Flow<Resource<Detail>>
 
-    fun getRemoteTVShows(): Flow<Resource<List<Movie>>>
+    fun getRemoteTVShows(page: Int): Flow<Resource<List<Movie>>>
 
     fun getDetailTVShows(id: Int): Flow<Resource<Detail>>
 

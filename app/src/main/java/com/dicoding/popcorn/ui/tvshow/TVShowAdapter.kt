@@ -11,24 +11,18 @@ import com.dicoding.popcorn.utils.loadImage
 import com.idputuwiprah.core.domain.model.Movie
 
 class TVShowAdapter : RecyclerView.Adapter<TVShowAdapter.TVShowsViewHolder>() {
+    private val listTVShows = ArrayList<Movie>()
     private lateinit var onClickListener: ItemCallback
-    private val diffCallback = object : DiffUtil.ItemCallback<Movie>() {
-        override fun areItemsTheSame(oldItem: Movie, newItem: Movie): Boolean {
-            return oldItem.movieId == newItem.movieId
-        }
-
-        override fun areContentsTheSame(oldItem: Movie, newItem: Movie): Boolean {
-            return oldItem.hashCode() == newItem.hashCode()
-        }
-    }
-    private val differ = AsyncListDiffer(this, diffCallback)
-
-    var listTVShows : List<Movie>
-        get() = differ.currentList
-        set(value) = differ.submitList(value)
 
     fun setOnClickListener(onClickListener: ItemCallback) {
         this.onClickListener = onClickListener
+    }
+
+    fun setShows(shows: List<Movie>?) {
+        if (shows == null) return
+        this.listTVShows.clear()
+        this.listTVShows.addAll(shows)
+        notifyDataSetChanged()
     }
 
     class TVShowsViewHolder(private val binding: ItemsTvshowsBinding) : RecyclerView.ViewHolder(binding.root) {
