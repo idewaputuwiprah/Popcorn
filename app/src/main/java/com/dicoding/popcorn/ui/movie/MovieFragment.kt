@@ -59,7 +59,9 @@ class MovieFragment : Fragment() {
             if (movies != null) {
                 when (movies) {
                     is Resource.Success -> {
-                        movieAdapter.setMovie(movies.data)
+                        movies.data?.let {
+                            movieAdapter.listMovies = it
+                        }
                         fragmentMovieBinding.apply {
                             tvMoviesNull.visibility = View.GONE
                             progressBar.visibility = View.GONE

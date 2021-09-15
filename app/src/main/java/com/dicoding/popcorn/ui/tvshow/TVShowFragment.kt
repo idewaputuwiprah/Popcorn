@@ -57,7 +57,9 @@ class TVShowFragment : Fragment() {
             if (tvShows != null) {
                 when (tvShows) {
                     is Resource.Success -> {
-                        tvShowAdapter.setShows(tvShows.data)
+                        tvShows.data?.let {
+                            tvShowAdapter.listTVShows = it
+                        }
                         fragmentTVShowBinding.apply {
                             tvTvshowsNull.visibility = View.GONE
                             progressBar.visibility = View.GONE

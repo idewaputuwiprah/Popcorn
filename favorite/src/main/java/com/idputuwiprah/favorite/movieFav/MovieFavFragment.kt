@@ -82,7 +82,9 @@ class MovieFavFragment : Fragment() {
 
     private fun setUpMovieObserver() {
         viewModel.getFavMovies().observe(requireActivity(), { movies->
-            movieAdapter.setMovie(movies)
+            movies?.let {
+                movieAdapter.listMovies = it
+            }
             if (movies.isNotEmpty()) {
                 fragmentMovieBinding.tvMoviesNull.visibility = View.INVISIBLE
             }
