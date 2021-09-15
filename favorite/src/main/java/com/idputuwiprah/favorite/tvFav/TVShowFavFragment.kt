@@ -81,7 +81,7 @@ class TVShowFavFragment : Fragment() {
     private fun setUpTVShowObserver() {
         viewModel.getFavTVShows().observe(requireActivity(), { tvShows->
             tvShows?.let {
-                tvShowAdapter.setShows(it)
+                tvShowAdapter.listTVShows = it
             }
             if (tvShows.isNotEmpty()) {
                 fragmentTVShowBinding.tvTvshowsNull.visibility = View.GONE

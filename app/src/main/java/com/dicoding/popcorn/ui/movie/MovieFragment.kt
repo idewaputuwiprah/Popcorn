@@ -79,7 +79,7 @@ class MovieFragment : Fragment() {
                         movies.data?.let {
                             if (currentList.hashCode() != it.hashCode())
                                 currentList.addAll(it)
-                            movieAdapter.setMovie(currentList)
+                            movieAdapter.listMovies = currentList.toMutableList()
                         }
                         fragmentMovieBinding.apply {
                             tvMoviesNull.visibility = View.GONE

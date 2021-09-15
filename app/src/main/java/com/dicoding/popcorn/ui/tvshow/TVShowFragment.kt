@@ -77,7 +77,7 @@ class TVShowFragment : Fragment() {
                         tvShows.data?.let {
                             if (currentList.hashCode() != it.hashCode())
                                 currentList.addAll(it)
-                            tvShowAdapter.setShows(currentList)
+                            tvShowAdapter.listTVShows = currentList.toMutableList()
                         }
                         fragmentTVShowBinding.apply {
                             tvTvshowsNull.visibility = View.GONE
